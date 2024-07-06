@@ -534,6 +534,26 @@ class Thread3(QThread):
             Light(0x00)
             delay(1000)
 
+
+
+timerCheck = False
+
+
+timeSec = 0 # 타이머 초
+
+
+# 타이머 쓰레드
+class Thread4(QThread):
+    updateSignal = pyqtSignal(int)
+
+    def run(int):
+        global timeSec
+
+        
+            
+    
+
+
 class Mywindow(QMainWindow, form_class):
     def __init__(self):
         super().__init__()
