@@ -194,7 +194,7 @@ class Thread2(QThread):
             Gear()
             global turnDeg
             # 멈춤
-            if(f1Avr > 40 and f2Avr > 100 and f3Avr > 40):
+            if(f1Avr > 30 and f2Avr > 50 and f3Avr > 30):
                 Go(0, 0)
 
             # 아무 상황도 아닐 경우
@@ -207,7 +207,7 @@ class Thread2(QThread):
                 turnDeg = f1Avr
                 Steering(turnDeg)
                 delay(300)
-            elif(f1Avr > 10 and l5Avr > 20):
+            elif(f1Avr > 5 and l5Avr > 10):
                 turnDeg = (f1Avr-10)+(l5Avr-20)
 
                 # 최대치 확인
@@ -223,7 +223,7 @@ class Thread2(QThread):
                 turnDeg = (-f3Avr)
                 Steering(turnDeg)
                 delay(300)
-            elif(f3Avr > 10 and r4Avr > 20):
+            elif(f3Avr > 5 and r4Avr > 10):
                 turnDeg = (-f3Avr+10)+(-r4Avr+20)
 
                 # 최대치 확인
@@ -459,7 +459,7 @@ class Thread2(QThread):
                     elif(text == "reload"):
                         say = ["robot", "잘 못들었어요. 다시 말해주세요\n(왼쪽, 직진으로 대답해주세요)"]
                         self.updateSignal.emit(say)
-                        say = ["person", text]
+                        say = ["person","인식하지 못 하였습니다"]
                         self.updateSignal.emit(say)
                         Al_sound("reload.mp3")
                         continue
@@ -560,11 +560,7 @@ class Mywindow(QMainWindow, form_class):
         if(say[0] == "robot"):
             self.txtRobotQue.setText(say[1])
         elif(say[0] == "person"):
-            if say[1] == "reload":
-                say[1] = "인식하지 못 하였습니다"
-                self.txtPersonAnw.setText(say[1])
-            else :
-                self.txtPersonAnw.setText(say[1])
+            self.txtPersonAnw.setText(say[1])
 
     # IR센서 초기화
     def IRSetBtn(self):
