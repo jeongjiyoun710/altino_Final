@@ -1,0 +1,16 @@
+<RCC>
+  <qresource prefix="altino">
+    <file>altino.jpg</file>
+  </qresource>
+  <qresource prefix="talkBox">
+    <file>talkBox1.png</file>
+    <file>talkBox2.png</file>
+  </qresource>
+  <qresource prefix="character">
+    <file>robot.png</file>
+    <file>사람.png</file>
+  </qresource>
+  <qresource prefix="logo">
+    <file>buil.png</file>
+  </qresource>
+</RCC>
