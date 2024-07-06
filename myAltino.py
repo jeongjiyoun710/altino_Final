@@ -11,19 +11,19 @@ import pygame
 
 sex=True
 
+# 보이냐 이건 정지윤
+
 # 음성 파일 재생
 def Al_sound(soundFileName):
     print("사운드 파일 재생 : " + soundFileName)
     pygame.mixer.init()
 
     # 사운드 소스 위치 설정
-    pygame.mixer.music.load("D:\\AltinoLite\\altino_Final\\mp3" + soundFileName) #실습실 
+    pygame.mixer.music.load("D:\\AltinoLite\\altino_Final\\mp3\\" + soundFileName) #실습실 
     # pygame.mixer.music.load("C:\\Users\\buil\Desktop\\altino_class\\sound\\" + soundFileName) #기능부실
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
         pygame.time.Clock().tick(10)
-
-
 
 form_class = uic.loadUiType("altino.ui")[0]
 
@@ -98,11 +98,8 @@ class Thread1(QThread):
 class Thread2(QThread):
     updateSignal = pyqtSignal(int)
 
-   
-
     def run(self):
 
-        
         # 음성인식
         def inputAudio():
             # 음성 인식기 인스턴스 생성
@@ -131,9 +128,6 @@ class Thread2(QThread):
                     print(f"구글 음성 인식 서비스에 문제가 있습니다: {e}")
                     error = ["sayError", str(e)]
                     self.updateSignal.emit(error)
-
-                
-
 
         # 센서 평균 구하기
         def Gear():
@@ -167,7 +161,6 @@ class Thread2(QThread):
             r4Avr = r4Sum // cnt
             l5Avr = l5Sum // cnt
             b6Avr = b6Sum // cnt
-
 
             cnt+=1
 
@@ -410,12 +403,7 @@ class Thread2(QThread):
         # ======================================
         # 다음은 불빛 감지시
 
-
         def cds_check(text):
-            
-            
-            
-    
             right = 1
             left = 1
             if(text == "직진"):
@@ -528,11 +516,9 @@ class Thread2(QThread):
             
             # 도착?
             if(sensor.CDS <= 0):
-                Go(0, 0)
+                Go(0,0)
                 Al_sound("end.mp3")
                 
-
-
             delay(100)
     
 
