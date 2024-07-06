@@ -10,6 +10,8 @@ from AltinoLite import *
 import pygame
 
 
+# 보이냐 이건 정지윤
+
 
 # 음성 파일 재생
 def Al_sound(soundFileName):
