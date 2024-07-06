@@ -9,7 +9,7 @@ from ast import Global
 from AltinoLite import *
 import pygame
 
-sex=True
+sex=Trueend
 
 # 보이냐 이건 정지윤
 
