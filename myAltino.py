@@ -16,7 +16,7 @@ def Al_sound(soundFileName):
     pygame.mixer.init()
 
     # 사운드 소스 위치 설정
-    pygame.mixer.music.load("D:\\AltinoLite\\altino_Final\\mp3\\" + soundFileName) #실습실 
+    pygame.mixer.music.load("mp3\\" + soundFileName) # 8day 폴더 기준
     # pygame.mixer.music.load("C:\\Users\\buil\Desktop\\altino_class\\sound\\" + soundFileName) #기능부실
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
@@ -540,10 +540,13 @@ timeSec = 0 # 타이머 초
 class Thread4(QThread):
     updateSignal = pyqtSignal(int)
 
-    def run(int):
+    def run(self):
         global timeSec
 
-        
+        while timerCheck == True:
+            self.updateSignal.emit(timeSec)
+            delay(1000)
+            timeSec += 1
             
     
 
@@ -593,14 +596,25 @@ class Mywindow(QMainWindow, form_class):
         self.thread1 = Thread1() # 적외선 센서
         self.thread2 = Thread2() # 자동 운전
         self.thread3 = Thread3() # 비상등 작동
+        self.thread4 = Thread4() # 타이머 작동
 
         self.thread1.updateSignal.connect(self.updateSensor) # 적외선 센서 작동
         self.thread2.updateSignal.connect(self.sayPrint) # 말하는 것 출력
+        self.thread4.updateSignal.connect(self.timerShow) # 타이머 실행
 
 
 
         self.btnAutoStart.clicked.connect(self.autoGoStart) # 자동운전 시작
         self.btnAutoStop.clicked.connect(self.autoGoStop) # 자동운전 종료
+
+
+    # 타이머 출력
+    def timerShow(self):
+        global timeSec
+
+        self.timer.setText(str(timeSec)+"초")
+        
+        
 
 
 
@@ -629,11 +643,25 @@ class Mywindow(QMainWindow, form_class):
         global autoGo
         autoGo = False
 
+        global timerCheck
+        timerCheck = False
+        self.thread4.start()
+
     # 자동운전 실행
     def autoGoStart(self):
         global autoGo
         autoGo = True
         self.thread2.start()
+
+        global timerCheck
+        global timeSec
+
+        timeSec = 0
+
+        timerCheck = True
+        self.thread4.start()
+
+        
 
         
 
