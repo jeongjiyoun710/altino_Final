@@ -9,7 +9,6 @@ from ast import Global
 from AltinoLite import *
 import pygame
 
-
 # 음성 파일 재생
 def Al_sound(soundFileName):
     print("사운드 파일 재생 : " + soundFileName)
@@ -23,7 +22,6 @@ def Al_sound(soundFileName):
         pygame.time.Clock().tick(10)
 
 form_class = uic.loadUiType("altino.ui")[0]
-
 
 # 센서들 작동
 sensorsOk = False
@@ -41,7 +39,6 @@ r4Sum = 0
 l5Sum = 0
 b6Sum = 0
 
-
 f1Avr = 0
 f2Avr = 0
 f3Avr = 0
@@ -50,7 +47,6 @@ l5Avr = 0
 b6Avr = 0
 
 cnt = 1  #평균 카운트
-
 
 # 바퀴 돌리는 각도 변수
 turnDeg = 0 
@@ -74,8 +70,6 @@ l5 = 0
 r4 = 0
    
 say=["",""]
-
-
 
 # 적외선 센서 쓰레드
 class Thread1(QThread):
@@ -146,7 +140,6 @@ class Thread2(QThread):
             l5Sum += sensor.IR[5]
             b6Sum += sensor.IR[6]
 
-
             f1Avr = f1Sum // cnt
             f2Avr = f2Sum // cnt
             f3Avr = f3Sum // cnt
@@ -166,7 +159,6 @@ class Thread2(QThread):
                 b6Sum = 0
 
             #print(str(f1Avr) + " | " + str(f2Avr) + " | " + str(f3Avr) + " | " + str(r4Avr) + " | " + str(l5Avr) + " | " + str(b6Avr))
-
 
         # 벽에 너무 붙었을 경우 회전
         def Turn():
@@ -197,7 +189,6 @@ class Thread2(QThread):
                 else:
                     Steering(turnDeg)
 
-
         # 이동하면서 벽에 부딪히지 않도록 회전
         def go_turn():
             Gear()
@@ -209,7 +200,6 @@ class Thread2(QThread):
             # 아무 상황도 아닐 경우
             else:
                 Steering(0)
-
 
             # 다음부터는 직진상태에서 커브
             # 오른쪽으로
@@ -275,7 +265,6 @@ class Thread2(QThread):
                 leftConer = False
                 rightConer = False 
 
-
         # 코너 체크가 되었다면, 앞이 막혔는지 확인하는 함수
         def forwardCloseCheck():
             global f2
@@ -301,7 +290,6 @@ class Thread2(QThread):
                     while turnCheck:
                         conerTurn("right")
         
-
         # 코너 돌기
         def conerTurn(result):
             turnValue = 0
@@ -323,7 +311,6 @@ class Thread2(QThread):
             f1Check = False
             f3Check = False
 
-
             b6 = 0 # 뒤 센서
 
             # 다 돌았을 경우 초기화할 변수들
@@ -343,7 +330,6 @@ class Thread2(QThread):
                 f1Check = True
             elif(f3 >= 100):
                 f3Check = True
-
 
             # 회전하며 이동하자 (뒤로)
             # 먼저 뒤에 부딪히는지 확인
@@ -420,9 +406,6 @@ class Thread2(QThread):
                         
                         return "con"
 
-
-
-
         global cds_cnt
         global cds_ok
         global say
@@ -435,15 +418,11 @@ class Thread2(QThread):
         
         while autoGo == True:
 
-
-
-
             Go(300, 300)
 
             # 코너 확인
             conerCheck()
 
-            
             Turn()
             go_turn()
 
@@ -464,7 +443,6 @@ class Thread2(QThread):
                 #self.updateSignal.emit()
                 #self.txtRobotQueView.setText("예 : 오른쪽, 왼쪽, 직진")
                 
-
                 text = ""
                 
                 answer = False
@@ -556,18 +534,12 @@ class Mywindow(QMainWindow, form_class):
         self.txtPerson.setPixmap(pixmapTalk2)
         self.txtPerson.setScaledContents(True) 
 
-
-
-
         # 알티노 연결 및 해제
         self.btnConnect.clicked.connect(self.altino_conn)
         self.btnDeconnect.clicked.connect(self.altino_deconn)
 
-
-
         # IR센서 초기화
         self.btnIRSet.clicked.connect(self.IRSetBtn)
-
 
         # 쓰레드 실행
         self.thread1 = Thread1() # 적외선 센서
@@ -577,12 +549,8 @@ class Mywindow(QMainWindow, form_class):
         self.thread1.updateSignal.connect(self.updateSensor) # 적외선 센서 작동
         self.thread2.updateSignal.connect(self.sayPrint) # 말하는 것 출력
 
-
-
         self.btnAutoStart.clicked.connect(self.autoGoStart) # 자동운전 시작
         self.btnAutoStop.clicked.connect(self.autoGoStop) # 자동운전 종료
-
-
 
     # 음성 출력
     def sayPrint(self):
@@ -615,9 +583,6 @@ class Mywindow(QMainWindow, form_class):
         autoGo = True
         self.thread2.start()
 
-        
-
-
     # 적외선 센서 표시
     def updateSensor(self):
         self.lcdF1.display(str(sensor.IR[1]))
@@ -626,7 +591,6 @@ class Mywindow(QMainWindow, form_class):
         self.lcdR4.display(str(sensor.IR[4]))
         self.lcdL5.display(str(sensor.IR[5]))
         self.lcdB6.display(str(sensor.IR[6]))
-
 
     # 알티노 연결
     def altino_conn(self):
@@ -663,9 +627,7 @@ class Mywindow(QMainWindow, form_class):
         except Exception as e:
             self.txtLog.appendPlainText(str(e))
             self.txtAltinoStatus.setText("연결오류")
-            
-
-
+        
     # 알티노 해제
     def altino_deconn(self):
         try:
