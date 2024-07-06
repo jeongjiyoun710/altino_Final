@@ -16,13 +16,11 @@ def Al_sound(soundFileName):
     pygame.mixer.init()
 
     # 사운드 소스 위치 설정
-    pygame.mixer.music.load("D:\\J.JiYoun\\python_class\\mp3\\" + soundFileName) #실습실 
+    pygame.mixer.music.load("D:\\AltinoLite\\altino_Final\\mp3\\" + soundFileName) #실습실 
     # pygame.mixer.music.load("C:\\Users\\buil\Desktop\\altino_class\\sound\\" + soundFileName) #기능부실
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
         pygame.time.Clock().tick(10)
-
-
 
 form_class = uic.loadUiType("altino.ui")[0]
 
@@ -123,9 +121,6 @@ class Thread2(QThread):
                     error = ["sayError", str(e)]
                     self.updateSignal.emit(error)
 
-                
-
-
         # 센서 평균 구하기
         def Gear():
             global f1Sum
@@ -158,7 +153,6 @@ class Thread2(QThread):
             r4Avr = r4Sum // cnt
             l5Avr = l5Sum // cnt
             b6Avr = b6Sum // cnt
-
 
             cnt+=1
 
@@ -398,12 +392,7 @@ class Thread2(QThread):
         # ======================================
         # 다음은 불빛 감지시
 
-
         def cds_check(text):
-            
-            
-            
-    
             right = 1
             left = 1
             if(text == "직진"):
@@ -492,10 +481,14 @@ class Thread2(QThread):
                     elif(text == "reload"):
                         say = ["robot", "잘 못들었어요. 다시 말해주세요\n(왼쪽, 직진으로 대답해주세요)"]
                         self.updateSignal.emit(say)
+                        say = ["person", text]
+                        self.updateSignal.emit(say)
                         Al_sound("reload.mp3")
                         continue
                     else:
                         say = ["robot", "예시 답안으로 다시 말해주세요\n(왼쪽, 직진으로 대답해주세요)"]
+                        self.updateSignal.emit(say)
+                        say = ["person", text]
                         self.updateSignal.emit(say)
                         Al_sound("reAnswer.mp3")
                         continue
@@ -516,9 +509,10 @@ class Thread2(QThread):
             
             # 도착?
             if(sensor.CDS <= 0):
-                Go(0, 0)
+                Go(0,0)
                 Al_sound("end.mp3")
-                self.updateSignal.emit("도착했습니다!! \n자동운전종료를 눌러주세요.")
+                say = ["robot", "도착했습니다!!\n자동운전종료를 눌러주세요."]
+                self.updateSignal.emit(say)
                 
             delay(100)
   
@@ -618,7 +612,11 @@ class Mywindow(QMainWindow, form_class):
         if(say[0] == "robot"):
             self.txtRobotQue.setText(say[1])
         elif(say[0] == "person"):
-            self.txtPersonAnw.setText(say[1])
+            if say[1] == "reload":
+                say[1] = "인식하지 못 하였습니다"
+                self.txtPersonAnw.setText(say[1])
+            else :
+                self.txtPersonAnw.setText(say[1])
 
     # IR센서 초기화
     def IRSetBtn(self):
