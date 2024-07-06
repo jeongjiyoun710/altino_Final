@@ -10,9 +10,6 @@ from AltinoLite import *
 import pygame
 
 
-# 보이냐 이건 정지윤
-
-
 # 음성 파일 재생
 def Al_sound(soundFileName):
     print("사운드 파일 재생 : " + soundFileName)
@@ -91,20 +88,12 @@ class Thread1(QThread):
             time.sleep(0.05)
             self.updateSignal.emit("test")
 
-
-
-
-
-
 # 자동운전 쓰레드
 class Thread2(QThread):
     updateSignal = pyqtSignal(int)
 
-   
-
     def run(self):
 
-        
         # 음성인식
         def inputAudio():
             # 음성 인식기 인스턴스 생성
@@ -260,9 +249,6 @@ class Thread2(QThread):
                 else:
                     Steering(turnDeg)
                     delay(300)
-
-
-
 
         # -------- 다음부터는 코너 회전 명령 ------------
 
@@ -480,7 +466,7 @@ class Thread2(QThread):
 
                 Go(0, 0)
 
-                say = ["robot", "멈췄습니다. 어디로 갈까요?\n(오른쪽, 왼쪽, 직진으로 대답해주세요)"]
+                say = ["robot", "멈췄습니다. 어디로 갈까요?\n(왼쪽, 직진으로 대답해주세요)"]
                 self.updateSignal.emit(say)
 
                 Al_sound("stopQue.mp3")
@@ -504,12 +490,12 @@ class Thread2(QThread):
                     if(text == "직진" or text == "오른쪽" or text == "왼쪽"):
                         answer = True
                     elif(text == "reload"):
-                        say = ["robot", "잘 못들었어요. 다시 말해주세요\n(오른쪽, 왼쪽, 직진으로 대답해주세요)"]
+                        say = ["robot", "잘 못들었어요. 다시 말해주세요\n(왼쪽, 직진으로 대답해주세요)"]
                         self.updateSignal.emit(say)
                         Al_sound("reload.mp3")
                         continue
                     else:
-                        say = ["robot", "예시 답안으로 다시 말해주세요\n(오른쪽, 왼쪽, 직진으로 대답해주세요)"]
+                        say = ["robot", "예시 답안으로 다시 말해주세요\n(왼쪽, 직진으로 대답해주세요)"]
                         self.updateSignal.emit(say)
                         Al_sound("reAnswer.mp3")
                         continue
@@ -532,13 +518,10 @@ class Thread2(QThread):
             if(sensor.CDS <= 0):
                 Go(0, 0)
                 Al_sound("end.mp3")
+                self.updateSignal.emit("도착했습니다!! \n자동운전종료를 눌러주세요.")
                 
-
-
             delay(100)
-    
-
-
+  
 # 비상등 쓰레드
 class Thread3(QThread):
     updateSignal = pyqtSignal(int)
@@ -550,10 +533,6 @@ class Thread3(QThread):
             delay(1000)
             Light(0x00)
             delay(1000)
-
-
-
-
 
 class Mywindow(QMainWindow, form_class):
     def __init__(self):
