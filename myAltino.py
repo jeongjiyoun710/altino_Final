@@ -481,10 +481,14 @@ class Thread2(QThread):
                     elif(text == "reload"):
                         say = ["robot", "잘 못들었어요. 다시 말해주세요\n(왼쪽, 직진으로 대답해주세요)"]
                         self.updateSignal.emit(say)
+                        say = ["person", text]
+                        self.updateSignal.emit(say)
                         Al_sound("reload.mp3")
                         continue
                     else:
                         say = ["robot", "예시 답안으로 다시 말해주세요\n(왼쪽, 직진으로 대답해주세요)"]
+                        self.updateSignal.emit(say)
+                        say = ["person", text]
                         self.updateSignal.emit(say)
                         Al_sound("reAnswer.mp3")
                         continue
@@ -588,7 +592,11 @@ class Mywindow(QMainWindow, form_class):
         if(say[0] == "robot"):
             self.txtRobotQue.setText(say[1])
         elif(say[0] == "person"):
-            self.txtPersonAnw.setText(say[1])
+            if say[1] == "reload":
+                say[1] = "인식하지 못 하였습니다"
+                self.txtPersonAnw.setText(say[1])
+            else :
+                self.txtPersonAnw.setText(say[1])
 
     # IR센서 초기화
     def IRSetBtn(self):
