@@ -687,15 +687,6 @@ class Mywindow(QMainWindow, form_class):
         except Exception as e:
             self.txtLog.appendPlainText(str(e))
 
-
-
-
-
-
-
-        
-
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     myWindow = Mywindow()
