@@ -9,7 +9,7 @@ from ast import Global
 from AltinoLite import *
 import pygame
 
-
+sex=True
 
 # 음성 파일 재생
 def Al_sound(soundFileName):
@@ -17,7 +17,7 @@ def Al_sound(soundFileName):
     pygame.mixer.init()
 
     # 사운드 소스 위치 설정
-    pygame.mixer.music.load("D:\\J.JiYoun\\python_class\\mp3\\" + soundFileName) #실습실 
+    pygame.mixer.music.load("D:\\AltinoLite\\altino_Final\\mp3" + soundFileName) #실습실 
     # pygame.mixer.music.load("C:\\Users\\buil\Desktop\\altino_class\\sound\\" + soundFileName) #기능부실
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
