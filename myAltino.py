@@ -175,8 +175,8 @@ class Thread2(QThread):
             global turnDeg
 
             # 우측으로 붙는 경우 왼쪽으로
-            if(r4Avr > 70):
-                turnDeg = (-r4Avr)+70
+            if(r4Avr > 60):
+                turnDeg = (-r4Avr)+60
                 if(turnDeg > 127 or turnDeg < -127):
                     # print("127 넘음")
                     Steering(-127)
@@ -188,9 +188,9 @@ class Thread2(QThread):
                 Steering(0)
 
             # 좌측으로 붙는 경우 오른쪽으로 => 센서 문제로 값 변경
-            elif(l5Avr > 90):
+            elif(l5Avr > 70):
                 # Steering(l5Avr-600)
-                turnDeg = l5Avr-90
+                turnDeg = l5Avr-70
                 if(turnDeg > 127 or turnDeg < -127):
                     # print("127 넘음")
                     Steering(127)
@@ -216,33 +216,33 @@ class Thread2(QThread):
             if(f1Avr > 5 and f2Avr >= 0 ):
                 turnDeg = f1Avr
                 Steering(turnDeg)
-                delay(800)
+                delay(300)
             elif(f1Avr > 10 and l5Avr > 20):
                 turnDeg = (f1Avr-10)+(l5Avr-20)
 
                 # 최대치 확인
                 if(turnDeg > 127 or turnDeg < -127):
                     Steering(127)
-                    delay(800)
+                    delay(300)
                 else:
                     Steering(turnDeg)
-                    delay(800)
+                    delay(300)
 
             # 왼쪽으로
             elif(f2Avr >= 0 and f3Avr > 10):
                 turnDeg = (-f3Avr)
                 Steering(turnDeg)
-                delay(800)
+                delay(300)
             elif(f3Avr > 10 and r4Avr > 20):
                 turnDeg = (-f3Avr+10)+(-r4Avr+20)
 
                 # 최대치 확인
                 if(turnDeg > 127 or turnDeg < -127):
                     Steering(-127)
-                    delay(800)
+                    delay(300)
                 else:
                     Steering(turnDeg)
-                    delay(800)
+                    delay(300)
 
         # -------- 다음부터는 코너 회전 명령 ------------
 
@@ -449,7 +449,7 @@ class Thread2(QThread):
 
             # 만약 sensor.CDS가 커지는 경우
             # 즉, 불빛 감지
-            if(sensor.CDS > 830 and cds_ok == False):
+            if(sensor.CDS > 700 and cds_ok == False):
 
                 say = []
 
@@ -502,13 +502,15 @@ class Thread2(QThread):
                     break
             cds_cnt+=1
 
+            print("조도 : "+str(sensor.CDS))
+
             # 불빛 감지 이후 10번은 불빛 감지 x
             if(cds_cnt == 50):
                 cds_ok = False
                 cds_cnt = 0
             
             # 도착?
-            if(sensor.CDS <= 0):
+            if(sensor.CDS <= 50):
                 Go(0,0)
                 Al_sound("end.mp3")
                 say = ["robot", "도착했습니다!!\n자동운전종료를 눌러주세요."]
@@ -559,8 +561,6 @@ class Mywindow(QMainWindow, form_class):
         super().__init__()
         self.setupUi(self)
 
-        # 내가 원하는 기능 추가
-        print(sensor.CDS)
 
         #이미지 초기화 처리를 한다. 
         pixmapLogo   = QPixmap("buil.png")
@@ -653,6 +653,7 @@ class Mywindow(QMainWindow, form_class):
 
     # 자동운전 실행
     def autoGoStart(self):
+        Steering(0)
         global autoGo
         autoGo = True
         self.thread2.start()
