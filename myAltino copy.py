@@ -70,6 +70,11 @@ l5 = 0
 r4 = 0
 
 backValue = 0
+
+
+# 코너시, 사용하는 변수
+f1Check = False
+f3Check = False
    
 say=["",""]
 
@@ -174,22 +179,21 @@ class Thread2(QThread):
             global b6Avr
 
             # 멈춤
-            if(f1Avr > 40 and f2Avr > 100 and f3Avr > 40):
+            if(f1Avr > 20 and f2Avr > 50 and f3Avr > 20):
                 Go(0, 0)
 
             # 아무 상황도 아닐 경우
             else:
                 Steering(0)
 
-
             # 다음부터는 직진상태에서 커브
             # 오른쪽으로
-            if(f1Avr > 5 and f2Avr > 1 ):
+            if(f1Avr > 5):
                 turnDeg = f1Avr-5
                 Steering(turnDeg)
                 delay(300)
             elif(f1Avr > 5 and l5Avr > 20):
-                turnDeg = (f1Avr-5)+(l5Avr-20)
+                turnDeg = (f1Avr)+(l5Avr-20)
 
                 # 최대치 확인
                 if(turnDeg > 127 or turnDeg < -127):
@@ -200,12 +204,12 @@ class Thread2(QThread):
                     delay(300)
 
             # 왼쪽으로
-            elif(f2Avr > 1 and f3Avr > 5):
+            elif(f3Avr > 5):
                 turnDeg = (-f3Avr)+5
                 Steering(turnDeg)
                 delay(300)
             elif(f3Avr > 5 and r4Avr > 20):
-                turnDeg = (-f3Avr+5)+(-r4Avr+20)
+                turnDeg = (-f3Avr)+(-r4Avr+20)
 
                 # 최대치 확인
                 if(turnDeg > 127 or turnDeg < -127):
@@ -218,24 +222,21 @@ class Thread2(QThread):
                 if(r4Avr >= 150):
                     turnDeg = (-r4Avr)+150
                     if(turnDeg > 127 or turnDeg < -127):
-                        # print("127 넘음")
                         Steering(-127)
+                    else:
+                        Steering(turnDeg)
+
+                # 좌측으로 붙는 경우 오른쪽으로
+                elif(l5Avr >= 150):
+                    turnDeg = l5Avr-150
+                    if(turnDeg > 127 or turnDeg < -127):
+                        Steering(127)
                     else:
                         Steering(turnDeg)
 
                 # 아무것도 아닌경우 다시 직진
                 elif(r4Avr < 150 and l5Avr < 150):
                     Steering(0)
-
-                # 좌측으로 붙는 경우 오른쪽으로
-                elif(l5Avr >= 150):
-                    # Steering(l5Avr-600)
-                    turnDeg = l5Avr-150
-                    if(turnDeg > 127 or turnDeg < -127):
-                        # print("127 넘음")
-                        Steering(127)
-                    else:
-                        Steering(turnDeg)
 
 
         # -------- 다음부터는 코너 회전 명령 ------------
@@ -312,8 +313,9 @@ class Thread2(QThread):
             f1 = 0
             global f2
             f3 = 0
-            f1Check = False
-            f3Check = False
+
+            global f1Check
+            global f3Check
 
             b6 = 0 # 뒤 센서
 
@@ -351,12 +353,12 @@ class Thread2(QThread):
             elif(f1Check == True):
                 Steering(-50) # 왼쪽으로 핸들
                 Go(-290, -290)
-                backValue = -50
+                backValue = -20
                 #print(f1Check, f3Check)
             elif(f3Check == True):
                 Steering(50) # 오른쪽으로 핸들 => 바퀴가 잘 안돌아가서 50으로 변경
                 Go(-290, -290)
-                backValue = 50
+                backValue = 20
                 #print(f1Check, f3Check)
             # 아무것도 해당하지 않을 경우
             else:
@@ -366,8 +368,10 @@ class Thread2(QThread):
                 #backFlag = 0
                 if ( backValue < 0 ) : 
                     Steering(127)
+                    delay(500)
                 elif ( backValue > 0 ) : 
                     Steering(-127)
+                    delay(500)
                 else :
                     Steering(0)
 
@@ -381,10 +385,8 @@ class Thread2(QThread):
                 #print("회전 종료")
                 if  leftConer ==False :
                     Steering(50)
-                    Delay(800)
                 elif rightConer==True :
                     Steering(-50)
-                    Delay(800)
                 else :                    
                     Steering(0)
 
@@ -411,6 +413,7 @@ class Thread2(QThread):
         global cds_cnt
         global cds_ok
         global say
+        global sensor_Dark
 
         print(autoGo)
         if ( autoGo == True ) :
@@ -480,12 +483,25 @@ class Thread2(QThread):
                     continue
                 else:
                     break
-            cds_cnt+=1
+            elif(sensor.CDS < 200):  # 예시로 조도 값이 200 미만일 때 어두운 곳으로 판단
+                sensor_Dark = True
+                while sensor_Dark :
+                    Go(0, 0)
+                self.updateSignal.emit(say)  # GUI 업데이트 신호 전송
+            else:
+                sensor_Dark = False
+                while sensor_Dark :
+                    Go(300, 300)  # 기본적인 움직임 제어
 
+            delay(200)
+            go_turn()
+
+            cds_cnt+=1
+            
             print("조도 : "+str(sensor.CDS))
 
             # 불빛 감지 이후 10번은 불빛 감지 x
-            if(cds_cnt == 50):
+            if(cds_cnt == 20):
                 cds_ok = False
                 cds_cnt = 0
             
@@ -524,13 +540,15 @@ class Thread4(QThread):
         global timerCheck
         global timeSec
 
-        while timerCheck == True:
-            self.updateSignal.emit(timeSec)
-            delay(1000)
-            timeSec += 1
-
-            if sensor.CDS < 300:
-                timerCheck = False
+        if sensor.CDS >= 500 :
+            timerCheck == False
+            while timerCheck == False :
+                Go(0,0)
+        else :
+            while timerCheck == True:
+                self.updateSignal.emit(timeSec)
+                delay(1000)
+                timeSec += 1
 
 class Mywindow(QMainWindow, form_class):
     def __init__(self):

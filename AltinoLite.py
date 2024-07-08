@@ -14,7 +14,7 @@ speed = 0
 connectstate = 0
 ser = serial.Serial() 
 ser.baudrate = 115200 #Bluetooth serial baudrate
-port='com3' # 자기 알티노 포트 번호
+port='com5' # 자기 알티노 포트 번호
 
 ser.timeout = 2000
 
