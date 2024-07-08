@@ -287,7 +287,7 @@ class Thread2(QThread):
 
             global turnCheck
 
-            if(f2 >= 120):
+            if(f2 >= 80):
                 Go(0, 0)
 
                 turnCheck = True
@@ -339,9 +339,9 @@ class Thread2(QThread):
             # 지금부터는 뒤로 다시 돌아가는 것 ====================
 
             # 뒤로 다시 회전 초기 설정
-            if(f1 >= 100):
+            if(f1 >= 70):
                 f1Check = True
-            elif(f3 >= 100):
+            elif(f3 >= 70):
                 f3Check = True
 
 
@@ -441,6 +441,7 @@ class Thread2(QThread):
 
             
             Turn()
+            delay(200)
             go_turn()
 
             # 만약 sensor.CDS가 커지는 경우
@@ -506,7 +507,7 @@ class Thread2(QThread):
                 cds_cnt = 0
             
             # 도착?
-            if(sensor.CDS <= 50):
+            if(sensor.CDS <= 150):
                 Go(0,0)
                 Al_sound("end.mp3")
                 say = ["robot", "도착했습니다!!\n자동운전종료를 눌러주세요."]
