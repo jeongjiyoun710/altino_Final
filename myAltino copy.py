@@ -68,6 +68,8 @@ forwardClose = False  # 앞이 막혔나 확인
 f2 = 0
 l5 = 0
 r4 = 0
+
+backValue = 0
    
 say=["",""]
 
@@ -161,7 +163,81 @@ class Thread2(QThread):
             #print(str(f1Avr) + " | " + str(f2Avr) + " | " + str(f3Avr) + " | " + str(r4Avr) + " | " + str(l5Avr) + " | " + str(b6Avr))
 
         # 벽에 너무 붙었을 경우 회전
-        #############################################################################################################################################################################
+        def go_turn():
+            Gear()
+            global turnDeg
+            global f1Avr
+            global f2Avr
+            global f3Avr
+            global r4Avr
+            global l5Avr
+            global b6Avr
+
+            # 멈춤
+            if(f1Avr > 40 and f2Avr > 100 and f3Avr > 40):
+                Go(0, 0)
+
+            # 아무 상황도 아닐 경우
+            else:
+                Steering(0)
+
+
+            # 다음부터는 직진상태에서 커브
+            # 오른쪽으로
+            if(f1Avr > 5 and f2Avr > 1 ):
+                turnDeg = f1Avr-5
+                Steering(turnDeg)
+                delay(300)
+            elif(f1Avr > 5 and l5Avr > 20):
+                turnDeg = (f1Avr-5)+(l5Avr-20)
+
+                # 최대치 확인
+                if(turnDeg > 127 or turnDeg < -127):
+                    Steering(127)
+                    delay(300)
+                else:
+                    Steering(turnDeg)
+                    delay(300)
+
+            # 왼쪽으로
+            elif(f2Avr > 1 and f3Avr > 5):
+                turnDeg = (-f3Avr)+5
+                Steering(turnDeg)
+                delay(300)
+            elif(f3Avr > 5 and r4Avr > 20):
+                turnDeg = (-f3Avr+5)+(-r4Avr+20)
+
+                # 최대치 확인
+                if(turnDeg > 127 or turnDeg < -127):
+                    Steering(-127)
+                    delay(300)
+                else:
+                    Steering(turnDeg)
+                    delay(300)
+            else:
+                if(r4Avr >= 150):
+                    turnDeg = (-r4Avr)+150
+                    if(turnDeg > 127 or turnDeg < -127):
+                        # print("127 넘음")
+                        Steering(-127)
+                    else:
+                        Steering(turnDeg)
+
+                # 아무것도 아닌경우 다시 직진
+                elif(r4Avr < 150 and l5Avr < 150):
+                    Steering(0)
+
+                # 좌측으로 붙는 경우 오른쪽으로
+                elif(l5Avr >= 150):
+                    # Steering(l5Avr-600)
+                    turnDeg = l5Avr-150
+                    if(turnDeg > 127 or turnDeg < -127):
+                        # print("127 넘음")
+                        Steering(127)
+                    else:
+                        Steering(turnDeg)
+
+
         # -------- 다음부터는 코너 회전 명령 ------------
 
         # 코너 만나는 것을 확인하는 함수
@@ -305,10 +381,10 @@ class Thread2(QThread):
                 #print("회전 종료")
                 if  leftConer ==False :
                     Steering(50)
-                    Delay(500)
+                    Delay(800)
                 elif rightConer==True :
                     Steering(-50)
-                    Delay(500)
+                    Delay(800)
                 else :                    
                     Steering(0)
 
@@ -349,7 +425,6 @@ class Thread2(QThread):
             # 코너 확인
             conerCheck()
 
-            Turn()
             delay(200)
             go_turn()
 
@@ -376,6 +451,7 @@ class Thread2(QThread):
 
                 while answer == False:
                     # 음성인식
+
                     text = inputAudio()
                     say = ["person", text]
 
@@ -453,7 +529,7 @@ class Thread4(QThread):
             delay(1000)
             timeSec += 1
 
-            if sensor.CDS < 200:
+            if sensor.CDS < 300:
                 timerCheck = False
 
 class Mywindow(QMainWindow, form_class):
