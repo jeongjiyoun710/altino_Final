@@ -1,0 +1,78 @@
+붙이기 전 확인!
+turn()과 go_turn() 지우기
+Open() 에서 turn() 과 go_turn() 지우기
+
+
+def go_turn():
+    Gear()
+    global turnDeg
+    global f1Avr
+    global f2Avr
+    global f3Avr
+    global r4Avr
+    global l5Avr
+    global b6Avr
+
+    # 멈춤
+    if(f1Avr > 40 and f2Avr > 100 and f3Avr > 40):
+        Go(0, 0)
+
+    # 아무 상황도 아닐 경우
+    else:
+        Steering(0)
+
+
+    # 다음부터는 직진상태에서 커브
+    # 오른쪽으로
+    if(f1Avr > 5 and f2Avr > 5 ):
+        turnDeg = f1Avr-5
+        Steering(turnDeg)
+        delay(300)
+    elif(f1Avr > 5 and l5Avr > 20):
+        turnDeg = (f1Avr-5)+(l5Avr-20)
+
+        # 최대치 확인
+        if(turnDeg > 127 or turnDeg < -127):
+            Steering(127)
+            delay(300)
+        else:
+            Steering(turnDeg)
+            delay(300)
+
+    # 왼쪽으로
+    elif(f2Avr > 5 and f3Avr > 5):
+        turnDeg = (-f3Avr)+5
+        Steering(turnDeg)
+        delay(300)
+    elif(f3Avr > 5 and r4Avr > 20):
+        turnDeg = (-f3Avr+5)+(-r4Avr+20)
+
+        # 최대치 확인
+        if(turnDeg > 127 or turnDeg < -127):
+            Steering(-127)
+            delay(300)
+        else:
+            Steering(turnDeg)
+            delay(300)
+    else:
+        if(r4Avr >= 150):
+            turnDeg = (-r4Avr)+150
+            if(turnDeg > 127 or turnDeg < -127):
+                # print("127 넘음")
+                Steering(-127)
+            else:
+                Steering(turnDeg)
+
+        # 아무것도 아닌경우 다시 직진
+        elif(r4Avr < 150 and l5Avr < 150):
+            Steering(0)
+
+        # 좌측으로 붙는 경우 오른쪽으로
+        elif(l5Avr >= 150):
+            # Steering(l5Avr-600)
+            turnDeg = l5Avr-150
+            if(turnDeg > 127 or turnDeg < -127):
+                # print("127 넘음")
+                Steering(127)
+            else:
+                Steering(turnDeg)
