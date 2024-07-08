@@ -217,7 +217,7 @@ class Thread2(QThread):
                 turnDeg = f1Avr
                 Steering(turnDeg)
                 delay(300)
-            elif(f1Avr > 10 and l5Avr > 20):
+            elif(f1Avr > 5 and l5Avr > 10):
                 turnDeg = (f1Avr-10)+(l5Avr-20)
 
                 # 최대치 확인
@@ -229,11 +229,11 @@ class Thread2(QThread):
                     delay(300)
 
             # 왼쪽으로
-            elif(f2Avr >= 0 and f3Avr > 10):
+            elif(f2Avr >= 0 and f3Avr > 5):
                 turnDeg = (-f3Avr)
                 Steering(turnDeg)
                 delay(300)
-            elif(f3Avr > 10 and r4Avr > 20):
+            elif(f3Avr > 5 and r4Avr > 10):
                 turnDeg = (-f3Avr+10)+(-r4Avr+20)
 
                 # 최대치 확인
@@ -377,7 +377,7 @@ class Thread2(QThread):
                 Go(300, 300)
 
             # 만약 다 돌았을 경우 => f1,2,3 센서가 아무것도 감지하지 않을 경우
-            if(f1 <= 50 and f2 <= 10 and f3 <= 50):
+            if(f1 < 50 and f2 < 10 and f3 < 50):
                 global turnCheck
 
                 turnCheck = False
@@ -465,7 +465,7 @@ class Thread2(QThread):
 
                     self.updateSignal.emit(say)
 
-                    if(text == "직진" or text == "오른쪽" or text == "왼쪽"):
+                    if(text == "직진" or text == "왼쪽"):
                         answer = True
                     elif(text == "reload"):
                         say = ["robot", "잘 못들었어요. 다시 말해주세요\n(왼쪽, 직진으로 대답해주세요)"]
