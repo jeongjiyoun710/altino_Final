@@ -245,6 +245,12 @@ class Thread2(QThread):
             r4 = sensor.IR[4]
             l5 = sensor.IR[5]
 
+
+            # 버그 수정
+            # 만약 빛이 없는 곳에서 코너가 확인되면
+            if(sensor.CDS <= 300):
+                return
+
             # 초기화 및 설정 (코너 확인)
             if(l5 != 0):
                 leftConer = False
