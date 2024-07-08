@@ -216,33 +216,33 @@ class Thread2(QThread):
             if(f1Avr > 5 and f2Avr >= 0 ):
                 turnDeg = f1Avr
                 Steering(turnDeg)
-                delay(300)
+                delay(800)
             elif(f1Avr > 10 and l5Avr > 20):
                 turnDeg = (f1Avr-10)+(l5Avr-20)
 
                 # 최대치 확인
                 if(turnDeg > 127 or turnDeg < -127):
                     Steering(127)
-                    delay(300)
+                    delay(800)
                 else:
                     Steering(turnDeg)
-                    delay(300)
+                    delay(800)
 
             # 왼쪽으로
             elif(f2Avr >= 0 and f3Avr > 10):
                 turnDeg = (-f3Avr)
                 Steering(turnDeg)
-                delay(300)
+                delay(800)
             elif(f3Avr > 10 and r4Avr > 20):
                 turnDeg = (-f3Avr+10)+(-r4Avr+20)
 
                 # 최대치 확인
                 if(turnDeg > 127 or turnDeg < -127):
                     Steering(-127)
-                    delay(300)
+                    delay(800)
                 else:
                     Steering(turnDeg)
-                    delay(300)
+                    delay(800)
 
         # -------- 다음부터는 코너 회전 명령 ------------
 
@@ -438,7 +438,7 @@ class Thread2(QThread):
 
 
 
-            Go(300, 300)
+            Go(280, 280)
 
             # 코너 확인
             conerCheck()
@@ -515,6 +515,9 @@ class Thread2(QThread):
                 self.updateSignal.emit(say)
                 
             delay(100)
+
+
+        Go(0, 0) # while 문 빠져나왔을 경우
   
 # 비상등 쓰레드
 class Thread3(QThread):
@@ -557,6 +560,7 @@ class Mywindow(QMainWindow, form_class):
         self.setupUi(self)
 
         # 내가 원하는 기능 추가
+        print(sensor.CDS)
 
         #이미지 초기화 처리를 한다. 
         pixmapLogo   = QPixmap("buil.png")
