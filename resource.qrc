@@ -8,7 +8,6 @@
   </qresource>
   <qresource prefix="character">
     <file>robot.png</file>
-    <file>사람.png</file>
   </qresource>
   <qresource prefix="logo">
     <file>buil.png</file>

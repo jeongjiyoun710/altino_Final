@@ -498,13 +498,13 @@ class Thread2(QThread):
             if(sensor.CDS <= 150):
                 global auto_fin
 
-                auto_fin == True
-                while auto_fin == True:
-                    Go(0,0)
-                    Al_sound("end.mp3")
-                    say = ["robot", "도착했습니다!!\n자동운전종료를 눌러주세요."]
-                    self.updateSignal.emit(say)
-                    delay(5000)
+                # auto_fin == True
+                # while auto_fin == True:
+                Go(0,0)
+                Al_sound("end.mp3")
+                say = ["robot", "도착했습니다!!\n자동운전종료를 눌러주세요."]
+                self.updateSignal.emit(say)
+                # delay(5000)
             delay(100)
         Go(0, 0) # while 문 빠져나왔을 경우
 
@@ -554,6 +554,11 @@ class Mywindow(QMainWindow, form_class):
         pixmapAltino = QPixmap("altino.jpg")
         pixmapTalk1 = QPixmap("talkBox1.png")
         pixmapTalk2 = QPixmap("talkBox2.png")
+        pixmapConnect = QPixmap("ui_img\\connect_altino.svg")
+        pixmapDisconnect = QPixmap("ui_img\\disconnect_altino.svg")
+        pixmapHelp = QPixmap("ui_img\\help.svg")
+        pixmapStart = QPixmap("ui_img\\start_altino.svg")
+        pixmapStop = QPixmap("ui_img\\stop_altino.svg")
 
         self.label_logo.setPixmap(pixmapLogo)
         self.label_logo.setScaledContents(True) 
@@ -567,6 +572,17 @@ class Mywindow(QMainWindow, form_class):
         self.txtRobot.setScaledContents(True) 
         self.txtPerson.setPixmap(pixmapTalk2)
         self.txtPerson.setScaledContents(True) 
+        self.pixmap_connect.setPixmap(pixmapConnect)
+        self.pixmap_connect.setScaledContents(True) 
+        self.pixmap_disconnect.setPixmap(pixmapDisconnect)
+        self.pixmap_disconnect.setScaledContents(True) 
+        self.pixmap_help.setPixmap(pixmapHelp)
+        self.pixmap_help.setScaledContents(True) 
+        self.pixmap_start.setPixmap(pixmapStart)
+        self.pixmap_start.setScaledContents(True) 
+        self.pixmap_stop.setPixmap(pixmapStop)
+        self.pixmap_stop.setScaledContents(True) 
+        
 
         # 알티노 연결 및 해제
         self.btnConnect.clicked.connect(self.altino_conn)
@@ -623,8 +639,8 @@ class Mywindow(QMainWindow, form_class):
         timerCheck = False
         self.thread4.start()
 
-        global auto_fin
-        auto_fin = False
+        # global auto_fin
+        # auto_fin = False
 
     # 자동운전 실행
     def autoGoStart(self):

@@ -53,7 +53,7 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">background: rgb(105, 105, 105)</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -65,9 +65,9 @@
   <widget class="QLabel" name="label_logo">
    <property name="geometry">
     <rect>
-     <x>770</x>
+     <x>910</x>
      <y>40</y>
-     <width>661</width>
+     <width>521</width>
      <height>81</height>
     </rect>
    </property>
@@ -80,8 +80,7 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">background:
-rgb(32, 91, 255)</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -122,7 +121,7 @@ rgb(32, 91, 255)</string>
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(55, 255, 165);</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -141,13 +140,10 @@ rgb(32, 91, 255)</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(0, 255, 0);</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>:/character/사람.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -163,7 +159,7 @@ rgb(32, 91, 255)</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(255, 234, 0);</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -385,7 +381,7 @@ border-radius: 20px;</string>
     <string>알티노 해제</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_17">
+  <widget class="QLabel" name="pixmap_disconnect">
    <property name="geometry">
     <rect>
      <x>270</x>
@@ -397,14 +393,11 @@ border-radius: 20px;</string>
    <property name="text">
     <string/>
    </property>
-   <property name="pixmap">
-    <pixmap resource="../Downloads/altino_Final-main/altino_Final-main/min_re.qrc">:/connect_altino/ui_img/disconnect_altino.svg</pixmap>
-   </property>
    <property name="scaledContents">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="label_18">
+  <widget class="QLabel" name="pixmap_connect">
    <property name="geometry">
     <rect>
      <x>270</x>
@@ -415,9 +408,6 @@ border-radius: 20px;</string>
    </property>
    <property name="text">
     <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="../Downloads/altino_Final-main/altino_Final-main/min_re.qrc">:/connect_altino/ui_img/connect_altino.svg</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -445,7 +435,7 @@ border-radius: 20px;</string>
     <string>알티노 연결</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_19">
+  <widget class="QLabel" name="pixmap_start">
    <property name="geometry">
     <rect>
      <x>500</x>
@@ -457,14 +447,11 @@ border-radius: 20px;</string>
    <property name="text">
     <string/>
    </property>
-   <property name="pixmap">
-    <pixmap resource="../Downloads/altino_Final-main/altino_Final-main/min_re.qrc">:/start_altino/ui_img/start_altino.svg</pixmap>
-   </property>
    <property name="scaledContents">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="label_20">
+  <widget class="QLabel" name="pixmap_stop">
    <property name="geometry">
     <rect>
      <x>500</x>
@@ -475,9 +462,6 @@ border-radius: 20px;</string>
    </property>
    <property name="text">
     <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="../Downloads/altino_Final-main/altino_Final-main/min_re.qrc">:/start_altino/ui_img/stop_altino.svg</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -920,7 +904,7 @@ border-radius: 20px;</string>
     <string>-</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_25">
+  <widget class="QLabel" name="pixmap_help">
    <property name="geometry">
     <rect>
      <x>990</x>
@@ -931,9 +915,6 @@ border-radius: 20px;</string>
    </property>
    <property name="text">
     <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="../Downloads/altino_Final-main/altino_Final-main/min_re.qrc">:/help/ui_img/help.svg</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -949,7 +930,7 @@ border-radius: 20px;</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(255, 234, 0);</string>
+    <string notr="true"/>
    </property>
    <property name="text">
     <string/>
@@ -985,9 +966,9 @@ border-radius: 20px;</string>
   <widget class="QLabel" name="txtPersonAnw">
    <property name="geometry">
     <rect>
-     <x>980</x>
+     <x>1040</x>
      <y>480</y>
-     <width>401</width>
+     <width>361</width>
      <height>101</height>
     </rect>
    </property>
@@ -1019,11 +1000,11 @@ border-radius: 20px;</string>
   <zorder>label_16</zorder>
   <zorder>altino_img</zorder>
   <zorder>btnDeconnect</zorder>
-  <zorder>label_17</zorder>
-  <zorder>label_18</zorder>
+  <zorder>pixmap_disconnect</zorder>
+  <zorder>pixmap_connect</zorder>
   <zorder>btnConnect</zorder>
-  <zorder>label_19</zorder>
-  <zorder>label_20</zorder>
+  <zorder>pixmap_start</zorder>
+  <zorder>pixmap_stop</zorder>
   <zorder>btnAutoStop</zorder>
   <zorder>btnAutoStart</zorder>
   <zorder>label_21</zorder>
@@ -1046,7 +1027,7 @@ border-radius: 20px;</string>
   <zorder>timer</zorder>
   <zorder>txtLog</zorder>
   <zorder>txtRobotQueView</zorder>
-  <zorder>label_25</zorder>
+  <zorder>pixmap_help</zorder>
   <zorder>person</zorder>
   <zorder>txtPerson</zorder>
   <zorder>robot</zorder>
@@ -1054,8 +1035,6 @@ border-radius: 20px;</string>
   <zorder>txtRobotQue</zorder>
   <zorder>txtPersonAnw</zorder>
  </widget>
- <resources>
-  <include location="../Downloads/altino_Final-main/altino_Final-main/min_re.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
