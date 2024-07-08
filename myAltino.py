@@ -176,7 +176,7 @@ class Thread2(QThread):
 
             # 우측으로 붙는 경우 왼쪽으로
             if(r4Avr > 60):
-                turnDeg = (-r4Avr)+60
+                turnDeg = (-r4Avr)+40
                 if(turnDeg > 127 or turnDeg < -127):
                     # print("127 넘음")
                     Steering(-127)
@@ -190,7 +190,7 @@ class Thread2(QThread):
             # 좌측으로 붙는 경우 오른쪽으로 => 센서 문제로 값 변경
             elif(l5Avr > 70):
                 # Steering(l5Avr-600)
-                turnDeg = l5Avr-70
+                turnDeg = l5Avr-50
                 if(turnDeg > 127 or turnDeg < -127):
                     # print("127 넘음")
                     Steering(127)
@@ -213,7 +213,7 @@ class Thread2(QThread):
 
             # 다음부터는 직진상태에서 커브
             # 오른쪽으로
-            if(f1Avr > 5 and f2Avr >= 0 ):
+            if(f1Avr > 5):
                 turnDeg = f1Avr
                 Steering(turnDeg)
                 delay(300)
@@ -287,7 +287,7 @@ class Thread2(QThread):
 
             global turnCheck
 
-            if(f2 >= 150):
+            if(f2 >= 120):
                 Go(0, 0)
 
                 turnCheck = True
@@ -351,14 +351,21 @@ class Thread2(QThread):
                 Go(0, 0)
                 f1Check = False
                 f3Check = False
+
+                if ( backValue < 0 ) : 
+                    Steering(127)
+                elif ( backValue > 0 ) : 
+                    Steering(-127)
+                else :
+                    Steering(0)
             elif(f1Check == True):
                 Steering(-30) # 왼쪽으로 핸들
-                Go(-300, -300)
+                Go(-290, -290)
                 backValue = -50
                 #print(f1Check, f3Check)
             elif(f3Check == True):
                 Steering(30) # 오른쪽으로 핸들 => 바퀴가 잘 안돌아가서 50으로 변경
-                Go(-300, -300)
+                Go(-290, -290)
                 backValue = 50
                 #print(f1Check, f3Check)
             # 아무것도 해당하지 않을 경우
@@ -374,7 +381,7 @@ class Thread2(QThread):
                 else :
                     Steering(0)
 
-                Go(300, 300)
+                Go(290, 290)
 
             # 만약 다 돌았을 경우 => f1,2,3 센서가 아무것도 감지하지 않을 경우
             if(f1 < 50 and f2 < 10 and f3 < 50):
