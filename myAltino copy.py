@@ -71,6 +71,10 @@ r4 = 0
    
 say=["",""]
 
+
+# 종료 여부
+auto_fin = False
+
 # 적외선 센서 쓰레드
 class Thread1(QThread):
     updateSignal = pyqtSignal(int)
@@ -492,15 +496,18 @@ class Thread2(QThread):
             
             # 도착?
             if(sensor.CDS <= 150):
-                Go(0,0)
-                Al_sound("end.mp3")
-                say = ["robot", "도착했습니다!!\n자동운전종료를 눌러주세요."]
-                self.updateSignal.emit(say)
-                
-            delay(100)
+                global auto_fin
 
+                auto_fin == True
+                while auto_fin == True:
+                    Go(0,0)
+                    Al_sound("end.mp3")
+                    say = ["robot", "도착했습니다!!\n자동운전종료를 눌러주세요."]
+                    self.updateSignal.emit(say)
+                    delay(5000)
+            delay(100)
         Go(0, 0) # while 문 빠져나왔을 경우
-  
+
 # 비상등 쓰레드
 class Thread3(QThread):
     updateSignal = pyqtSignal(int)
@@ -615,6 +622,9 @@ class Mywindow(QMainWindow, form_class):
         global timerCheck
         timerCheck = False
         self.thread4.start()
+
+        global auto_fin
+        auto_fin = False
 
     # 자동운전 실행
     def autoGoStart(self):
