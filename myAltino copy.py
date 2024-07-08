@@ -160,41 +160,18 @@ class Thread2(QThread):
 
             #print(str(f1Avr) + " | " + str(f2Avr) + " | " + str(f3Avr) + " | " + str(r4Avr) + " | " + str(l5Avr) + " | " + str(b6Avr))
 
-        # 벽에 너무 붙었을 경우 회전
-        def Turn():
-            Gear()
-            print("Trun")
-            global turnDeg
-
-            # 우측으로 붙는 경우 왼쪽으로
-            if(r4Avr > 60):
-                turnDeg = (-r4Avr)+40
-                if(turnDeg > 127 or turnDeg < -127):
-                    # print("127 넘음")
-                    Steering(-127)
-                else:
-                    Steering(turnDeg)
-
-            # 아무것도 아닌경우 다시 직진
-            elif(r4Avr < 100 and l5Avr < 100):
-                Steering(0)
-
-            # 좌측으로 붙는 경우 오른쪽으로 => 센서 문제로 값 변경
-            elif(l5Avr > 70):
-                # Steering(l5Avr-600)
-                turnDeg = l5Avr-50
-                if(turnDeg > 127 or turnDeg < -127):
-                    # print("127 넘음")
-                    Steering(127)
-                else:
-                    Steering(turnDeg)
-
-        # 이동하면서 벽에 부딪히지 않도록 회전
         def go_turn():
             Gear()
             global turnDeg
+            global f1Avr
+            global f2Avr
+            global f3Avr
+            global r4Avr
+            global l5Avr
+            global b6Avr
+
             # 멈춤
-            if(f1Avr > 40 and f2Avr > 100 and f3Avr > 40):
+            if(f1Avr > 20 and f2Avr > 50 and f3Avr > 20):
                 Go(0, 0)
 
             # 아무 상황도 아닐 경우
@@ -203,12 +180,12 @@ class Thread2(QThread):
 
             # 다음부터는 직진상태에서 커브
             # 오른쪽으로
-            if(f1Avr > 20 or f2Avr >= 10):
-                turnDeg = (f1Avr)
+            if(f1Avr > 5):
+                turnDeg = f1Avr-5
                 Steering(turnDeg)
                 delay(300)
-            elif(f1Avr > 10 and l5Avr > 20):
-                turnDeg = (f1Avr-10)+(l5Avr-20)
+            elif(f1Avr > 5 and l5Avr > 20):
+                turnDeg = (f1Avr)+(l5Avr-20)
 
                 # 최대치 확인
                 if(turnDeg > 127 or turnDeg < -127):
@@ -219,12 +196,12 @@ class Thread2(QThread):
                     delay(300)
 
             # 왼쪽으로
-            elif(f2Avr >= 10 and f3Avr > 20):
-                turnDeg = (-f3Avr)
+            elif(f3Avr > 5):
+                turnDeg = (-f3Avr)+5
                 Steering(turnDeg)
                 delay(300)
-            elif(f3Avr > 10 and r4Avr > 20):
-                turnDeg = (-f3Avr+10)+(-r4Avr+20)
+            elif(f3Avr > 5 and r4Avr > 20):
+                turnDeg = (-f3Avr)+(-r4Avr+20)
 
                 # 최대치 확인
                 if(turnDeg > 127 or turnDeg < -127):
@@ -233,6 +210,25 @@ class Thread2(QThread):
                 else:
                     Steering(turnDeg)
                     delay(300)
+            else:
+                if(r4Avr >= 150):
+                    turnDeg = (-r4Avr)+150
+                    if(turnDeg > 127 or turnDeg < -127):
+                        Steering(-127)
+                    else:
+                        Steering(turnDeg)
+
+                # 좌측으로 붙는 경우 오른쪽으로
+                elif(l5Avr >= 150):
+                    turnDeg = l5Avr-150
+                    if(turnDeg > 127 or turnDeg < -127):
+                        Steering(127)
+                    else:
+                        Steering(turnDeg)
+
+                # 아무것도 아닌경우 다시 직진
+                elif(r4Avr < 150 and l5Avr < 150):
+                    Steering(0)
 
         # -------- 다음부터는 코너 회전 명령 ------------
 
@@ -425,7 +421,6 @@ class Thread2(QThread):
             # 코너 확인
             conerCheck()
 
-            Turn()
             delay(200)
             go_turn()
 
