@@ -353,12 +353,12 @@ class Thread2(QThread):
                 f3Check = False
             elif(f1Check == True):
                 Steering(-30) # 왼쪽으로 핸들
-                Go(-270, -270)
+                Go(-300, -300)
                 backValue = -50
                 #print(f1Check, f3Check)
             elif(f3Check == True):
                 Steering(30) # 오른쪽으로 핸들 => 바퀴가 잘 안돌아가서 50으로 변경
-                Go(-270, -270)
+                Go(-300, -300)
                 backValue = 50
                 #print(f1Check, f3Check)
             # 아무것도 해당하지 않을 경우
@@ -374,7 +374,7 @@ class Thread2(QThread):
                 else :
                     Steering(0)
 
-                Go(270, 270)
+                Go(300, 300)
 
             # 만약 다 돌았을 경우 => f1,2,3 센서가 아무것도 감지하지 않을 경우
             if(f1 <= 50 and f2 <= 10 and f3 <= 50):
@@ -393,22 +393,11 @@ class Thread2(QThread):
         # 다음은 불빛 감지시
 
         def cds_check(text):
-            right = 1
             left = 1
             if(text == "직진"):
                 Go(300, 300)
 
                 return "con"
-            elif(text == "오른쪽"):
-                while right:
-                    Go(300, 300)
-                    if(sensor.IR[3] <= 30):
-                        Steering(127)
-                        delay(4000)
-                        Steering(0)
-                        right = 0
-                        
-                        return "con"
             elif(text == "왼쪽"):
                 while left:
                     Go(300, 300)
@@ -438,7 +427,7 @@ class Thread2(QThread):
 
 
 
-            Go(280, 280)
+            Go(300, 300)
 
             # 코너 확인
             conerCheck()
