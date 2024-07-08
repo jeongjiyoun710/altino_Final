@@ -1,0 +1,13 @@
+<RCC>
+  <qresource prefix="connect_altino">
+    <file>ui_img/connect_altino.svg</file>
+    <file>ui_img/disconnect_altino.svg</file>
+  </qresource>
+  <qresource prefix="help">
+    <file>ui_img/help.svg</file>
+  </qresource>
+  <qresource prefix="start_altino">
+    <file>ui_img/start_altino.svg</file>
+    <file>ui_img/stop_altino.svg</file>
+  </qresource>
+</RCC>
