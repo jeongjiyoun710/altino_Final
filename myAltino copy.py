@@ -524,9 +524,10 @@ class Thread4(QThread):
             delay(1000)
             timeSec += 1
 
-            if sensor.CDS < 200:
-                timerCheck = False
-                Go(0,0)
+            # 어두워지면 타이머 종료 및 멈추기
+            # if sensor.CDS < 200:
+            #     timerCheck = False
+            #     Go(0,0)
 
 class Mywindow(QMainWindow, form_class):
     def __init__(self):
