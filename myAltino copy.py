@@ -174,21 +174,13 @@ class Thread2(QThread):
             global l5Avr
             global b6Avr
 
-            # 멈춤
-            if(f1Avr > 20 and f2Avr > 50 and f3Avr > 20):
-                Go(0, 0)
-
-            # 아무 상황도 아닐 경우
-            else:
-                Steering(0)
-
             # 다음부터는 직진상태에서 커브
             # 오른쪽으로
             if(f1Avr > 5):
-                turnDeg = f1Avr-5
+                turnDeg = f1Avr-2
                 Steering(turnDeg)
                 delay(300)
-            elif(f1Avr > 5 and l5Avr > 20):
+            elif(f1Avr > 5 and l5Avr > 10):
                 turnDeg = (f1Avr)+(l5Avr-20)
 
                 # 최대치 확인
@@ -201,10 +193,10 @@ class Thread2(QThread):
 
             # 왼쪽으로
             elif(f3Avr > 5):
-                turnDeg = (-f3Avr)+5
+                turnDeg = (-f3Avr)+2
                 Steering(turnDeg)
                 delay(300)
-            elif(f3Avr > 5 and r4Avr > 20):
+            elif(f3Avr > 5 and r4Avr > 10):
                 turnDeg = (-f3Avr)+(-r4Avr+20)
 
                 # 최대치 확인
@@ -285,6 +277,11 @@ class Thread2(QThread):
 
             global turnCheck
 
+            # 버그 수정
+            # 만약 빛이 없는 곳에서 코너가 확인되면
+            if(sensor.CDS <= 300):
+                return
+
             if(f2 >= 80):
                 Go(0, 0)
 
@@ -293,10 +290,18 @@ class Thread2(QThread):
                 # 멈춘 후, 빈 방향으로 꺾기 함수 실행
                 if(leftConer == True):
                     while turnCheck:
+                        # 버그 수정
+                        # 만약 빛이 없는 곳에서 코너가 확인되면
+                        if(sensor.CDS <= 300):
+                            break
                         conerTurn("left")
                         
                 elif(rightConer == True):
                     while turnCheck:
+                        # 버그 수정
+                        # 만약 빛이 없는 곳에서 코너가 확인되면
+                        if(sensor.CDS <= 300):
+                            break
                         conerTurn("right")
 
 
@@ -382,7 +387,7 @@ class Thread2(QThread):
                 Go(290, 290)
 
             # 만약 다 돌았을 경우 => f1,2,3 센서가 아무것도 감지하지 않을 경우
-            if(f1 < 50 and f2 < 10 and f3 < 50):
+            if(f1 < 20 and f2 < 10 and f3 < 20):
                 global turnCheck
 
                 turnCheck = False
