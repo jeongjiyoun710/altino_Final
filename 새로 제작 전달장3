@@ -1,0 +1,15 @@
+변경점 1.
+--> def keyPressEvent(self, e): 에 다음 코드를 추가하세요
+
+        if e.key() == Qt.key_F8:
+            if( autoGo == True ) :
+                self.txtLog.appendPlainText(" -- 아직 게임이 끝나지않아 알티노를 뒤로 이동시킬 수 없습니다. -- ")
+            else :
+                Go(-300, -300)
+
+                # 몇초동안 움질일 것인지
+                self.txtLog.appendPlainText(" -- 알티노를 이동시키는 중 입니다. -- ")
+                delay(3000)
+
+                Go(0, 0)
+                self.txtLog.appendPlainText(" -- 알티노를 뒤로 이동시켰습니다. -- ")
