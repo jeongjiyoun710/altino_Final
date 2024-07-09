@@ -2,12 +2,14 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal, Qt
 
 import speech_recognition as sr
 from ast import Global
 from AltinoLite import *
 import pygame
+
+import requests
 
 # 음성 파일 재생
 def Al_sound(soundFileName):
@@ -71,9 +73,27 @@ r4 = 0
    
 say=["",""]
 
+backValue = 0
+
+
+# 유저 정보
+userNameTxt = ''
+userPhoneTxt = ''
+
+# 유저 정보를 받았는지 체크
+userDataUp = False
+
+# timeSec 를 받았는지 체크
+userTimeEnd = False
+
 
 # 종료 여부
 auto_fin = False
+
+# 서버 보내기
+def recordUserData( UserName, UserPhone, UserScore ) :
+    requests.get('http://desk.sjkim.net:8888/score?NAME=' + str( UserName ) + '&PHONE=' + str( UserPhone ) + '&SCORE=' + str( UserScore ))
+    print(str(UserName) + "님의 정보 등록이 완료 되었습니다.")
 
 # 적외선 센서 쓰레드
 class Thread1(QThread):
@@ -532,8 +552,8 @@ class Thread4(QThread):
 
         while timerCheck == True:
             self.updateSignal.emit(timeSec)
-            delay(1000)
-            timeSec += 1
+            delay(10)
+            timeSec += 0.01
 
             # 어두워지면 타이머 종료 및 멈추기
             # if sensor.CDS < 200:
@@ -542,16 +562,17 @@ class Thread4(QThread):
 
 class Mywindow(QMainWindow, form_class):
     def __init__(self):
+        
         super().__init__()
         self.setupUi(self)
 
         #이미지 초기화 처리를 한다. 
-        pixmapLogo   = QPixmap("buil.png")
-        pixmapPerson = QPixmap("person.png")
-        pixmapRobot = QPixmap("robot.png")
-        pixmapAltino = QPixmap("altino.jpg")
-        pixmapTalk1 = QPixmap("talkBox1.png")
-        pixmapTalk2 = QPixmap("talkBox2.png")
+        pixmapLogo   = QPixmap("ui_img\\buil.png")
+        pixmapPerson = QPixmap("ui_img\\person.png")
+        pixmapRobot = QPixmap("ui_img\\robot.png")
+        pixmapAltino = QPixmap("ui_img\\altino_lite_img.png")
+        pixmapTalk1 = QPixmap("ui_img\\talkBox1.png")
+        pixmapTalk2 = QPixmap("ui_img\\talkBox2.png")
         pixmapConnect = QPixmap("ui_img\\connect_altino.svg")
         pixmapDisconnect = QPixmap("ui_img\\disconnect_altino.svg")
         pixmapHelp = QPixmap("ui_img\\help.svg")
@@ -602,11 +623,80 @@ class Mywindow(QMainWindow, form_class):
         self.btnAutoStart.clicked.connect(self.autoGoStart) # 자동운전 시작
         self.btnAutoStop.clicked.connect(self.autoGoStop) # 자동운전 종료
 
+
+    # 키 이벤트
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_F8:
+            if( autoGo == True ) :
+                self.txtLog.appendPlainText(" -- 아직 게임이 끝나지않아 알티노를 뒤로 이동시킬 수 없습니다. -- ")
+            else :
+                Go(-300, -300)
+
+                # 몇초동안 움질일 것인지
+                self.txtLog.appendPlainText(" -- 알티노를 이동시키는 중 입니다. -- ")
+                delay(3000)
+
+                Go(0, 0)
+                self.txtLog.appendPlainText(" -- 알티노를 뒤로 이동시켰습니다. -- ")
+
+        if e.key() == Qt.Key_F1:
+            # 입력한 이름과 전화번호 저장 하기
+            global userNameTxt
+            global userPhoneTxt
+            global userDataUp
+
+            # 값 존재 여부 검사
+            if( self.userNametxt.text() == '' or self.userPhonetxt.text() == '' ) :
+                self.txtLog.appendPlainText(" -- 유저의 이름또는 유저의 전화번호의 값이 존재 하지 않습니다. -- ")
+            # 값이 다 존재한다면 각각의 변수에 저장
+            else :
+                # 전화번호가 11글자 라면,
+                if( len(self.userPhonetxt.text()) == 11 ) :
+                    userNameTxt = self.userNametxt.text()
+                    userPhoneTxt = self.userPhonetxt.text()
+                    self.txtLog.appendPlainText(" -- 유저의 정보를 입력 받았습니다. -- ")
+                    userDataUp = True
+                    
+                    # 전호번호 가리기
+                    self.userPhonetxt.setText("010 - XXXX - " + str(userPhoneTxt[7:11]) )
+                # 아니라면,
+                else :
+                    self.txtLog.appendPlainText(" -- 전화번호의 길이가 잘못되었습니다. -- ")
+
+        if e.key() == Qt.Key_F4:
+            global userTimeEnd
+
+            # 게임이 끝나있다면,
+            if( userTimeEnd == True ) :
+                global timeSec
+
+                timeSec = round(timeSec, 2) - 0.01
+                print(timeSec)
+
+                # 서버로 get 요청 보내기
+                recordUserData( userNameTxt, userPhoneTxt, timeSec )
+                self.txtLog.appendPlainText(" -- 유저의 정보를 포함한 최종 결과를 저장하였습니다. -- ")
+                self.txtLog.appendPlainText(" -- " + userNameTxt + "님의 정보 등록이 완료 되었습니다. -- ")
+                self.txtLog.appendPlainText(" -- 키보드 F8을 눌러 알티노 라이트를 빼내세요 -- ")
+
+                # 사용된 값들 초기화
+                userNameTxt = ''
+                userPhoneTxt = ''
+                timeSec = 0
+                userTimeEnd = False
+
+                # 입력란 비우기
+                self.userNametxt.setText('')
+                self.userPhonetxt.setText('')
+            # 아니라면,
+            else :
+                self.txtLog.appendPlainText(" -- 아직 게임이 끝나지 않았습니다. -- ")
+
     # 타이머 출력
     def timerShow(self):
         global timeSec
 
-        self.timer.setText(str(timeSec)+"초")
+        self.timer.setText(str(round(timeSec, 2)) + "초")
         
     # 음성 출력
     def sayPrint(self):
@@ -625,35 +715,50 @@ class Mywindow(QMainWindow, form_class):
     # IR센서 초기화
     def IRSetBtn(self):
         Go(0, 0)
-        self.txtLog.appendPlainText("IR센서 초기화중..")
+        self.txtLog.appendPlainText("적외선[IR] 센서 초기화 완료..")
         IRSet()
 
     # 자동운전 멈춤
     def autoGoStop(self):
         global autoGo
+        global timeSec
         autoGo = False
 
         global timerCheck
         timerCheck = False
         self.thread4.start()
 
+        self.txtLog.appendPlainText(" -- 키보드 F4를 눌러 기록을 저장하세요 -- ")
+
+        global userDataUp
+        userDataUp = False
+
+        global userTimeEnd
+        userTimeEnd = True
+
         # global auto_fin
         # auto_fin = False
 
     # 자동운전 실행
     def autoGoStart(self):
-        Steering(0)
-        global autoGo
-        autoGo = True
-        self.thread2.start()
+        global userDataUp
+        
+        if ( userDataUp == False ) :
+            self.txtLog.appendPlainText(" -- 유저 정보를 입력받지 않은 상태에서 시작하실 수 없습니다. -- ")
+            self.txtLog.appendPlainText(" -- 정보를 입력 후, 키보드 F1을 눌러주세요. -- ")
+        else :
+            Steering(0)
+            global autoGo
+            autoGo = True
+            self.thread2.start()
 
-        global timerCheck
-        global timeSec
+            global timerCheck
+            global timeSec
 
-        timeSec = 0
+            timeSec = 0
 
-        timerCheck = True
-        self.thread4.start()
+            timerCheck = True
+            self.thread4.start()
 
     # 적외선 센서 표시
     def updateSensor(self):

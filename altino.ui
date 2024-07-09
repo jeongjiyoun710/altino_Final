@@ -22,10 +22,10 @@
   <widget class="QPlainTextEdit" name="txtLog">
    <property name="geometry">
     <rect>
-     <x>810</x>
+     <x>790</x>
      <y>680</y>
-     <width>611</width>
-     <height>151</height>
+     <width>651</width>
+     <height>161</height>
     </rect>
    </property>
    <property name="font">
@@ -38,9 +38,9 @@
   <widget class="QLabel" name="altino_img">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>180</x>
      <y>200</y>
-     <width>271</width>
+     <width>431</width>
      <height>451</height>
     </rect>
    </property>
@@ -363,7 +363,7 @@ border-radius: 20px;</string>
    <property name="geometry">
     <rect>
      <x>340</x>
-     <y>830</y>
+     <y>810</y>
      <width>121</width>
      <height>41</height>
     </rect>
@@ -385,7 +385,7 @@ border-radius: 20px;</string>
    <property name="geometry">
     <rect>
      <x>270</x>
-     <y>830</y>
+     <y>810</y>
      <width>51</width>
      <height>41</height>
     </rect>
@@ -401,7 +401,7 @@ border-radius: 20px;</string>
    <property name="geometry">
     <rect>
      <x>270</x>
-     <y>770</y>
+     <y>750</y>
      <width>51</width>
      <height>41</height>
     </rect>
@@ -417,7 +417,7 @@ border-radius: 20px;</string>
    <property name="geometry">
     <rect>
      <x>340</x>
-     <y>770</y>
+     <y>750</y>
      <width>121</width>
      <height>41</height>
     </rect>
@@ -439,7 +439,7 @@ border-radius: 20px;</string>
    <property name="geometry">
     <rect>
      <x>500</x>
-     <y>770</y>
+     <y>750</y>
      <width>51</width>
      <height>41</height>
     </rect>
@@ -455,7 +455,7 @@ border-radius: 20px;</string>
    <property name="geometry">
     <rect>
      <x>500</x>
-     <y>830</y>
+     <y>810</y>
      <width>51</width>
      <height>41</height>
     </rect>
@@ -471,7 +471,7 @@ border-radius: 20px;</string>
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>830</y>
+     <y>810</y>
      <width>121</width>
      <height>41</height>
     </rect>
@@ -493,7 +493,7 @@ border-radius: 20px;</string>
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>770</y>
+     <y>750</y>
      <width>121</width>
      <height>41</height>
     </rect>
@@ -835,10 +835,10 @@ border-radius: 20px;</string>
   <widget class="QLabel" name="label_23">
    <property name="geometry">
     <rect>
-     <x>780</x>
-     <y>890</y>
+     <x>1270</x>
+     <y>885</y>
      <width>91</width>
-     <height>16</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -859,10 +859,10 @@ border-radius: 20px;</string>
   <widget class="QLabel" name="timer">
    <property name="geometry">
     <rect>
-     <x>880</x>
-     <y>890</y>
+     <x>1370</x>
+     <y>885</y>
      <width>91</width>
-     <height>16</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -883,10 +883,10 @@ border-radius: 20px;</string>
   <widget class="QLabel" name="txtRobotQueView">
    <property name="geometry">
     <rect>
-     <x>1060</x>
+     <x>340</x>
      <y>880</y>
-     <width>431</width>
-     <height>41</height>
+     <width>401</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -907,7 +907,7 @@ border-radius: 20px;</string>
   <widget class="QLabel" name="pixmap_help">
    <property name="geometry">
     <rect>
-     <x>990</x>
+     <x>270</x>
      <y>870</y>
      <width>51</width>
      <height>51</height>
@@ -987,6 +987,108 @@ border-radius: 20px;</string>
     <string>안녕?</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label_24">
+   <property name="geometry">
+    <rect>
+     <x>770</x>
+     <y>880</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Hancom Gothic</family>
+     <pointsize>16</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;</string>
+   </property>
+   <property name="text">
+    <string>이름</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="userNametxt">
+   <property name="geometry">
+    <rect>
+     <x>820</x>
+     <y>880</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Hancom Gothic</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_25">
+   <property name="geometry">
+    <rect>
+     <x>970</x>
+     <y>880</y>
+     <width>111</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Hancom Gothic</family>
+     <pointsize>16</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;</string>
+   </property>
+   <property name="text">
+    <string>전화번호</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="userPhonetxt">
+   <property name="geometry">
+    <rect>
+     <x>1060</x>
+     <y>880</y>
+     <width>171</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Hancom Gothic</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
   <zorder>label</zorder>
   <zorder>label_12</zorder>
   <zorder>label_3</zorder>
@@ -1034,6 +1136,10 @@ border-radius: 20px;</string>
   <zorder>txtRobot</zorder>
   <zorder>txtRobotQue</zorder>
   <zorder>txtPersonAnw</zorder>
+  <zorder>label_24</zorder>
+  <zorder>userNametxt</zorder>
+  <zorder>label_25</zorder>
+  <zorder>userPhonetxt</zorder>
  </widget>
  <resources/>
  <connections/>
