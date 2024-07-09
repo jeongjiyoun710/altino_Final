@@ -1,0 +1,152 @@
+변경점 1.
+--> 변수 추가
+# 유저 정보
+userNameTxt = ''
+userPhoneTxt = ''
+
+# 유저 정보를 받았는지 체크
+userDataUp = False
+
+# timeSec 를 받았는지 체크
+userTimeEnd = False
+
+
+변경점 2.
+--> pip install requests 한 뒤, 파일에 import requests 넣을 것
+
+
+변경점 3.
+--> from PyQt5.QtCore import QThread, pyqtSignal를 from PyQt5.QtCore import QThread, pyqtSignal, Qt 로 변경하셈
+
+
+변경점 4.
+--> def recordUserData( UserName, UserPhone, UserScore ) :
+    requests.get('http://desk.sjkim.net:8888/score?NAME=' + str( UserName ) + '&PHONE=' + str( UserPhone ) + '&SCORE=' + str( UserScore ))
+    print(str(UserName) + "님의 정보 등록이 완료 되었습니다.")
+    함수를 변수들과 동일 선상에 놓아야 함
+
+
+변경점 5.
+--> 타이머 쓰레드 바꿔치기 하셈
+
+
+# 타이머 쓰레드
+class Thread4(QThread):
+    updateSignal = pyqtSignal(int)
+
+    def run(self):
+        global timerCheck
+        global timeSec
+
+        while timerCheck == True:
+            self.updateSignal.emit(timeSec)
+            delay(10)
+            timeSec += 0.01
+
+            # 어두워지면 타이머 종료 및 멈추기
+            # if sensor.CDS < 200:
+            #     timerCheck = False
+            #     Go(0,0)
+
+변경점 6.
+--> def__inint__(self): 과 동일 선상에 위치해야 함
+
+# 키 이벤트
+def keyPressEvent(self, e):
+    if e.key() == Qt.Key_F1:
+        # 입력한 이름과 전화번호 저장 하기
+        global userNameTxt
+        global userPhoneTxt
+        global userDataUp
+
+        # 값 존재 여부 검사
+        if( self.userNametxt.text() == '' or self.userPhonetxt.text() == '' ) :
+            self.txtLog.appendPlainText(" -- 유저의 이름또는 유저의 전화번호의 값이 존재 하지 않습니다. -- ")
+        # 값이 다 존재한다면 각각의 변수에 저장
+        else :
+            # 전화번호가 11글자 라면,
+            if( len(self.userPhonetxt.text()) == 11 ) :
+                userNameTxt = self.userNametxt.text()
+                userPhoneTxt = self.userPhonetxt.text()
+                self.txtLog.appendPlainText(" -- 유저의 정보를 입력 받았습니다. -- ")
+                userDataUp = True
+                
+                # 전호번호 가리기
+                self.userPhonetxt.setText("010 - XXXX - " + str(userPhoneTxt[7:11]) )
+            # 아니라면,
+            else :
+                self.txtLog.appendPlainText(" -- 전화번호의 길이가 잘못되었습니다. -- ")
+
+    if e.key() == Qt.Key_F4:
+        global userTimeEnd
+
+        # 게임이 끝나있다면,
+        if( userTimeEnd == True ) :
+            global timeSec
+
+            timeSec = round(timeSec, 2) - 0.01
+            print(timeSec)
+
+            # 서버로 get 요청 보내기
+            recordUserData( userNameTxt, userPhoneTxt, timeSec )
+            self.txtLog.appendPlainText(" -- 유저의 정보를 포함한 최종 결과를 저장하였습니다. -- ")
+            self.txtLog.appendPlainText(" -- " + userNameTxt + "님의 정보 등록이 완료 되었습니다. -- ")
+
+            # 사용된 값들 초기화
+            userNameTxt = ''
+            userPhoneTxt = ''
+            timeSec = 0
+            userTimeEnd = False
+
+            # 입력란 비우기
+            self.userNametxt.setText('')
+            self.userPhonetxt.setText('')
+        # 아니라면,
+        else :
+            self.txtLog.appendPlainText(" -- 아직 게임이 끝나지 않았습니다. -- ")
+
+
+변경점 7.
+--> 이대로 함수 내용 바꿔
+    # 자동운전 멈춤
+    def autoGoStop(self):
+        global autoGo
+        global timeSec
+        autoGo = False
+
+        global timerCheck
+        timerCheck = False
+        self.thread4.start()
+
+        global userDataUp
+        userDataUp = False
+
+        global userTimeEnd
+        userTimeEnd = True
+
+        # global auto_fin
+        # auto_fin = False
+
+
+변경점 8.
+--> 이대로 함수 내용 바꿔
+    # 자동운전 실행
+    def autoGoStart(self):
+        global userDataUp
+        
+        if ( userDataUp == False ) :
+            self.txtLog.appendPlainText(" -- 유저 정보를 입력받지 않은 상태에서 시작하실 수 없습니다. -- ")
+        else :
+            Steering(0)
+            global autoGo
+            autoGo = True
+            self.thread2.start()
+
+            global timerCheck
+            global timeSec
+
+            timeSec = 0
+
+            timerCheck = True
+            self.thread4.start()
+        
