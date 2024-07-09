@@ -816,7 +816,7 @@ class Mywindow(QMainWindow, form_class):
             connectQue = False
 
             Light(0x00)
-            
+             
             Go(0, 0)
 
             Close()
