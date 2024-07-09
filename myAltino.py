@@ -282,7 +282,7 @@ class Thread2(QThread):
             if(sensor.CDS <= 300):
                 return
 
-            if(f2 >= 80):
+            if(f2 >= 40):
                 Go(0, 0)
 
                 turnCheck = True
@@ -307,16 +307,6 @@ class Thread2(QThread):
 
         # 코너 돌기
         def conerTurn(result):
-            turnValue = 0
-            
-            # 오른쪽 or 왼쪽
-            if(result == "left"):
-                turnValue = -127
-            elif(result == "right"):
-                turnValue = 127
-
-            #print(result)
-            # ----------------------------------
 
             # 회전이동 시작
             # 벽에 부딪히는지 확인
@@ -351,7 +341,6 @@ class Thread2(QThread):
             # 회전하며 이동하자 (뒤로)
             # 먼저 뒤에 부딪히는지 확인
             if(b6>=300):
-                Go(0, 0)
                 f1Check = False
                 f3Check = False
 
@@ -361,14 +350,17 @@ class Thread2(QThread):
                     Steering(-127)
                 else :
                     Steering(0)
+
+                Go(280, 280)
+
             elif(f1Check == True):
                 Steering(-30) # 왼쪽으로 핸들
-                Go(-290, -290)
+                Go(-280, -280)
                 backValue = -50
                 #print(f1Check, f3Check)
             elif(f3Check == True):
-                Steering(30) # 오른쪽으로 핸들 => 바퀴가 잘 안돌아가서 50으로 변경
-                Go(-290, -290)
+                Steering(30) # 오른쪽으로 핸들
+                Go(-280, -280)
                 backValue = 50
                 #print(f1Check, f3Check)
             # 아무것도 해당하지 않을 경우
@@ -441,6 +433,7 @@ class Thread2(QThread):
 
             # 만약 sensor.CDS가 커지는 경우
             # 즉, 불빛 감지
+            # 조도 센서 감지
             if(sensor.CDS > 700 and cds_ok == False):
 
                 say = []
