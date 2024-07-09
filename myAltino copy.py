@@ -362,12 +362,12 @@ class Thread2(QThread):
                 else :
                     Steering(0)
             elif(f1Check == True):
-                Steering(-30) # 왼쪽으로 핸들
+                Steering(-50) # 왼쪽으로 핸들
                 Go(-290, -290)
                 backValue = -50
                 #print(f1Check, f3Check)
             elif(f3Check == True):
-                Steering(30) # 오른쪽으로 핸들 => 바퀴가 잘 안돌아가서 50으로 변경
+                Steering(50) # 오른쪽으로 핸들 => 바퀴가 잘 안돌아가서 50으로 변경
                 Go(-290, -290)
                 backValue = 50
                 #print(f1Check, f3Check)
@@ -387,7 +387,7 @@ class Thread2(QThread):
                 Go(290, 290)
 
             # 만약 다 돌았을 경우 => f1,2,3 센서가 아무것도 감지하지 않을 경우
-            if(f1 < 20 and f2 < 10 and f3 < 20):
+            if(f1 < 10 or f2 < 5 or f3 < 10):
                 global turnCheck
 
                 turnCheck = False
@@ -413,7 +413,7 @@ class Thread2(QThread):
                     Go(300, 300)
                     if(sensor.IR[3] <= 30):
                         Steering(-127)
-                        delay(4000)
+                        delay(4500)
                         Steering(0)
                         left = 0
                         
@@ -438,6 +438,18 @@ class Thread2(QThread):
 
             delay(200)
             go_turn()
+
+            if(sensor.CDS <= 150):
+                global auto_fin
+
+                # auto_fin == True
+                # while auto_fin == True:
+                Go(0,0)
+                Al_sound("end.mp3")
+                say = ["robot", "도착했습니다!!\n자동운전종료를 눌러주세요."]
+                self.updateSignal.emit(say)
+                # delay(5000)
+            delay(100)
 
             # 만약 sensor.CDS가 커지는 경우
             # 즉, 불빛 감지
@@ -500,17 +512,7 @@ class Thread2(QThread):
                 cds_cnt = 0
             
             # 도착?
-            if(sensor.CDS <= 150):
-                global auto_fin
-
-                # auto_fin == True
-                # while auto_fin == True:
-                Go(0,0)
-                Al_sound("end.mp3")
-                say = ["robot", "도착했습니다!!\n자동운전종료를 눌러주세요."]
-                self.updateSignal.emit(say)
-                # delay(5000)
-            delay(100)
+            
         Go(0, 0) # while 문 빠져나왔을 경우
 
 # 비상등 쓰레드

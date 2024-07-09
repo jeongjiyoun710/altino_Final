@@ -71,6 +71,10 @@ r4 = 0
    
 say=["",""]
 
+
+# 종료 여부
+auto_fin = False
+
 # 적외선 센서 쓰레드
 class Thread1(QThread):
     updateSignal = pyqtSignal(int)
@@ -160,55 +164,24 @@ class Thread2(QThread):
 
             #print(str(f1Avr) + " | " + str(f2Avr) + " | " + str(f3Avr) + " | " + str(r4Avr) + " | " + str(l5Avr) + " | " + str(b6Avr))
 
-        # 벽에 너무 붙었을 경우 회전
-        def Turn():
-            Gear()
-            print("Trun")
-            global turnDeg
-
-            # 우측으로 붙는 경우 왼쪽으로
-            if(r4Avr > 60):
-                turnDeg = (-r4Avr)+40
-                if(turnDeg > 127 or turnDeg < -127):
-                    # print("127 넘음")
-                    Steering(-127)
-                else:
-                    Steering(turnDeg)
-
-            # 아무것도 아닌경우 다시 직진
-            elif(r4Avr < 100 and l5Avr < 100):
-                Steering(0)
-
-            # 좌측으로 붙는 경우 오른쪽으로 => 센서 문제로 값 변경
-            elif(l5Avr > 70):
-                # Steering(l5Avr-600)
-                turnDeg = l5Avr-50
-                if(turnDeg > 127 or turnDeg < -127):
-                    # print("127 넘음")
-                    Steering(127)
-                else:
-                    Steering(turnDeg)
-
-        # 이동하면서 벽에 부딪히지 않도록 회전
         def go_turn():
             Gear()
             global turnDeg
-            # 멈춤
-            if(f1Avr > 40 and f2Avr > 100 and f3Avr > 40):
-                Go(0, 0)
-
-            # 아무 상황도 아닐 경우
-            else:
-                Steering(0)
+            global f1Avr
+            global f2Avr
+            global f3Avr
+            global r4Avr
+            global l5Avr
+            global b6Avr
 
             # 다음부터는 직진상태에서 커브
             # 오른쪽으로
-            if(f1Avr > 20 or f2Avr >= 10):
-                turnDeg = (f1Avr)
+            if(f1Avr > 5):
+                turnDeg = f1Avr-2
                 Steering(turnDeg)
                 delay(300)
-            elif(f1Avr > 10 and l5Avr > 20):
-                turnDeg = (f1Avr-10)+(l5Avr-20)
+            elif(f1Avr > 5 and l5Avr > 10):
+                turnDeg = (f1Avr)+(l5Avr-20)
 
                 # 최대치 확인
                 if(turnDeg > 127 or turnDeg < -127):
@@ -219,12 +192,12 @@ class Thread2(QThread):
                     delay(300)
 
             # 왼쪽으로
-            elif(f2Avr >= 10 and f3Avr > 20):
-                turnDeg = (-f3Avr)
+            elif(f3Avr > 5):
+                turnDeg = (-f3Avr)+2
                 Steering(turnDeg)
                 delay(300)
-            elif(f3Avr > 10 and r4Avr > 20):
-                turnDeg = (-f3Avr+10)+(-r4Avr+20)
+            elif(f3Avr > 5 and r4Avr > 10):
+                turnDeg = (-f3Avr)+(-r4Avr+20)
 
                 # 최대치 확인
                 if(turnDeg > 127 or turnDeg < -127):
@@ -233,6 +206,25 @@ class Thread2(QThread):
                 else:
                     Steering(turnDeg)
                     delay(300)
+            else:
+                if(r4Avr >= 150):
+                    turnDeg = (-r4Avr)+150
+                    if(turnDeg > 127 or turnDeg < -127):
+                        Steering(-127)
+                    else:
+                        Steering(turnDeg)
+
+                # 좌측으로 붙는 경우 오른쪽으로
+                elif(l5Avr >= 150):
+                    turnDeg = l5Avr-150
+                    if(turnDeg > 127 or turnDeg < -127):
+                        Steering(127)
+                    else:
+                        Steering(turnDeg)
+
+                # 아무것도 아닌경우 다시 직진
+                elif(r4Avr < 150 and l5Avr < 150):
+                    Steering(0)
 
         # -------- 다음부터는 코너 회전 명령 ------------
 
@@ -249,6 +241,12 @@ class Thread2(QThread):
             r4 = sensor.IR[4]
             l5 = sensor.IR[5]
 
+
+            # 버그 수정
+            # 만약 빛이 없는 곳에서 코너가 확인되면
+            if(sensor.CDS <= 300):
+                return
+
             # 초기화 및 설정 (코너 확인)
             if(l5 != 0):
                 leftConer = False
@@ -258,12 +256,15 @@ class Thread2(QThread):
             if(l5 == 0):
                 leftConer = True
                 forwardCloseCheck()
+                print("left")
             elif(r4 == 0):
                 rightConer = True
                 forwardCloseCheck()
+                print("right")
             else :
                 leftConer = False
                 rightConer = False 
+
 
         # 코너 체크가 되었다면, 앞이 막혔는지 확인하는 함수
         def forwardCloseCheck():
@@ -276,7 +277,12 @@ class Thread2(QThread):
 
             global turnCheck
 
-            if(f2 > 20):
+            # 버그 수정
+            # 만약 빛이 없는 곳에서 코너가 확인되면
+            if(sensor.CDS <= 300):
+                return
+
+            if(f2 >= 80):
                 Go(0, 0)
 
                 turnCheck = True
@@ -284,12 +290,21 @@ class Thread2(QThread):
                 # 멈춘 후, 빈 방향으로 꺾기 함수 실행
                 if(leftConer == True):
                     while turnCheck:
+                        # 버그 수정
+                        # 만약 빛이 없는 곳에서 코너가 확인되면
+                        if(sensor.CDS <= 300):
+                            break
                         conerTurn("left")
                         
                 elif(rightConer == True):
                     while turnCheck:
+                        # 버그 수정
+                        # 만약 빛이 없는 곳에서 코너가 확인되면
+                        if(sensor.CDS <= 300):
+                            break
                         conerTurn("right")
-        
+
+
         # 코너 돌기
         def conerTurn(result):
             turnValue = 0
@@ -311,6 +326,7 @@ class Thread2(QThread):
             f1Check = False
             f3Check = False
 
+
             b6 = 0 # 뒤 센서
 
             # 다 돌았을 경우 초기화할 변수들
@@ -331,6 +347,7 @@ class Thread2(QThread):
             elif(f3 >= 70):
                 f3Check = True
 
+
             # 회전하며 이동하자 (뒤로)
             # 먼저 뒤에 부딪히는지 확인
             if(b6>=300):
@@ -345,12 +362,12 @@ class Thread2(QThread):
                 else :
                     Steering(0)
             elif(f1Check == True):
-                Steering(-50) # 왼쪽으로 핸들
+                Steering(-30) # 왼쪽으로 핸들
                 Go(-290, -290)
                 backValue = -50
                 #print(f1Check, f3Check)
             elif(f3Check == True):
-                Steering(50) # 오른쪽으로 핸들 => 바퀴가 잘 안돌아가서 50으로 변경
+                Steering(30) # 오른쪽으로 핸들 => 바퀴가 잘 안돌아가서 50으로 변경
                 Go(-290, -290)
                 backValue = 50
                 #print(f1Check, f3Check)
@@ -370,17 +387,15 @@ class Thread2(QThread):
                 Go(290, 290)
 
             # 만약 다 돌았을 경우 => f1,2,3 센서가 아무것도 감지하지 않을 경우
-            if(f1 < 50 and f2 < 10 and f3 < 50):
+            if(f1 < 20 and f2 < 10 and f3 < 20):
                 global turnCheck
 
                 turnCheck = False
                 #print("회전 종료")
                 if  leftConer ==False :
                     Steering(50)
-                    Delay(500)
                 elif rightConer==True :
                     Steering(-50)
-                    Delay(500)
                 else :                    
                     Steering(0)
 
@@ -421,7 +436,6 @@ class Thread2(QThread):
             # 코너 확인
             conerCheck()
 
-            Turn()
             delay(200)
             go_turn()
 
@@ -487,15 +501,18 @@ class Thread2(QThread):
             
             # 도착?
             if(sensor.CDS <= 150):
+                global auto_fin
+
+                # auto_fin == True
+                # while auto_fin == True:
                 Go(0,0)
                 Al_sound("end.mp3")
                 say = ["robot", "도착했습니다!!\n자동운전종료를 눌러주세요."]
                 self.updateSignal.emit(say)
-                
+                # delay(5000)
             delay(100)
-
         Go(0, 0) # while 문 빠져나왔을 경우
-  
+
 # 비상등 쓰레드
 class Thread3(QThread):
     updateSignal = pyqtSignal(int)
@@ -525,8 +542,10 @@ class Thread4(QThread):
             delay(1000)
             timeSec += 1
 
-            if sensor.CDS < 200:
-                timerCheck = False
+            # 어두워지면 타이머 종료 및 멈추기
+            # if sensor.CDS < 200:
+            #     timerCheck = False
+            #     Go(0,0)
 
 class Mywindow(QMainWindow, form_class):
     def __init__(self):
@@ -540,6 +559,11 @@ class Mywindow(QMainWindow, form_class):
         pixmapAltino = QPixmap("altino.jpg")
         pixmapTalk1 = QPixmap("talkBox1.png")
         pixmapTalk2 = QPixmap("talkBox2.png")
+        pixmapConnect = QPixmap("ui_img\\connect_altino.svg")
+        pixmapDisconnect = QPixmap("ui_img\\disconnect_altino.svg")
+        pixmapHelp = QPixmap("ui_img\\help.svg")
+        pixmapStart = QPixmap("ui_img\\start_altino.svg")
+        pixmapStop = QPixmap("ui_img\\stop_altino.svg")
 
         self.label_logo.setPixmap(pixmapLogo)
         self.label_logo.setScaledContents(True) 
@@ -553,6 +577,17 @@ class Mywindow(QMainWindow, form_class):
         self.txtRobot.setScaledContents(True) 
         self.txtPerson.setPixmap(pixmapTalk2)
         self.txtPerson.setScaledContents(True) 
+        self.pixmap_connect.setPixmap(pixmapConnect)
+        self.pixmap_connect.setScaledContents(True) 
+        self.pixmap_disconnect.setPixmap(pixmapDisconnect)
+        self.pixmap_disconnect.setScaledContents(True) 
+        self.pixmap_help.setPixmap(pixmapHelp)
+        self.pixmap_help.setScaledContents(True) 
+        self.pixmap_start.setPixmap(pixmapStart)
+        self.pixmap_start.setScaledContents(True) 
+        self.pixmap_stop.setPixmap(pixmapStop)
+        self.pixmap_stop.setScaledContents(True) 
+        
 
         # 알티노 연결 및 해제
         self.btnConnect.clicked.connect(self.altino_conn)
@@ -608,6 +643,9 @@ class Mywindow(QMainWindow, form_class):
         global timerCheck
         timerCheck = False
         self.thread4.start()
+
+        # global auto_fin
+        # auto_fin = False
 
     # 자동운전 실행
     def autoGoStart(self):
