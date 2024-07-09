@@ -38,9 +38,9 @@
   <widget class="QLabel" name="altino_img">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>180</x>
      <y>200</y>
-     <width>271</width>
+     <width>431</width>
      <height>451</height>
     </rect>
    </property>
@@ -111,10 +111,10 @@
   <widget class="QLabel" name="robot">
    <property name="geometry">
     <rect>
-     <x>1280</x>
-     <y>210</y>
+     <x>1270</x>
+     <y>230</y>
      <width>171</width>
-     <height>221</height>
+     <height>171</height>
     </rect>
    </property>
    <property name="autoFillBackground">
@@ -134,9 +134,9 @@
    <property name="geometry">
     <rect>
      <x>790</x>
-     <y>530</y>
-     <width>131</width>
-     <height>131</height>
+     <y>510</y>
+     <width>151</width>
+     <height>151</height>
     </rect>
    </property>
    <property name="styleSheet">
