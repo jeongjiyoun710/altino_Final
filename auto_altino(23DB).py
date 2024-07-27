@@ -129,7 +129,7 @@ class Thread2(QThread):
                     # 음성을 텍스트로 변환 (한글 인식)
                     text = recognizer.recognize_google(audio_data, language='ko-KR')
                     print(f"인식된 텍스트: {text}")
-                    return text        
+                    return text          
                 except sr.UnknownValueError:
                     print("음성을 인식할 수 없습니다.")
                     return "reload"
@@ -264,7 +264,7 @@ class Thread2(QThread):
 
             # 버그 수정
             # 만약 빛이 없는 곳에서 코너가 확인되면
-            if(sensor.CDS <= 300):
+            if(sensor.CDS <= 80):
                 return
 
             # 초기화 및 설정 (코너 확인)
@@ -299,7 +299,7 @@ class Thread2(QThread):
 
             # 버그 수정
             # 만약 빛이 없는 곳에서 코너가 확인되면
-            if(sensor.CDS <= 300):
+            if(sensor.CDS <= 80):
                 return
 
             if(f2 >= 40):
@@ -312,7 +312,7 @@ class Thread2(QThread):
                     while turnCheck:
                         # 버그 수정
                         # 만약 빛이 없는 곳에서 코너가 확인되면
-                        if(sensor.CDS <= 300):
+                        if(sensor.CDS <= 80):
                             break
                         conerTurn("left")
                         
@@ -320,7 +320,7 @@ class Thread2(QThread):
                     while turnCheck:
                         # 버그 수정
                         # 만약 빛이 없는 곳에서 코너가 확인되면
-                        if(sensor.CDS <= 300):
+                        if(sensor.CDS <= 80):
                             break
                         conerTurn("right")
 
@@ -517,7 +517,7 @@ class Thread2(QThread):
                 cds_cnt = 0
             
             # 도착?
-            if(sensor.CDS <= 150):
+            if(sensor.CDS <= 80):
                 global auto_fin
 
                 # auto_fin == True
@@ -572,8 +572,8 @@ class Mywindow(QMainWindow, form_class):
 
         #이미지 초기화 처리를 한다. 
         pixmapLogo   = QPixmap("ui_img\\buil.png")
-        pixmapPerson = QPixmap("ui_img\\person.png")
-        pixmapRobot = QPixmap("ui_img\\robot.png")
+        pixmapPerson = QPixmap("ui_img\\person_img.png")
+        pixmapRobot = QPixmap("ui_img\\robot_img.png")
         pixmapAltino = QPixmap("ui_img\\altino_lite_img.png")
         pixmapTalk1 = QPixmap("ui_img\\talkBox1.png")
         pixmapTalk2 = QPixmap("ui_img\\talkBox2.png")
@@ -705,7 +705,7 @@ class Mywindow(QMainWindow, form_class):
     # 음성 출력
     def sayPrint(self):
         global say
-        print(say[0] +"/"+ say[1])
+        # print(say[0] +"/"+ say[1])
         
         if(say[0] == "robot"):
             self.txtRobotQue.setText(say[1])

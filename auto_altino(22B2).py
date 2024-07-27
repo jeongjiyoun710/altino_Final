@@ -17,8 +17,7 @@ def Al_sound(soundFileName):
     pygame.mixer.init()
 
     # 사운드 소스 위치 설정
-    pygame.mixer.music.load("mp3\\" + soundFileName) # 8day 폴더 기준
-    # pygame.mixer.music.load("C:\\Users\\buil\Desktop\\altino_class\\sound\\" + soundFileName) #기능부실
+    pygame.mixer.music.load("mp3\\" + soundFileName) # 현재 폴더 위치를 기준으로
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
         pygame.time.Clock().tick(10)
@@ -182,7 +181,6 @@ class Thread2(QThread):
                 l5Sum = 0
                 b6Sum = 0
 
-            #print(str(f1Avr) + " | " + str(f2Avr) + " | " + str(f3Avr) + " | " + str(r4Avr) + " | " + str(l5Avr) + " | " + str(b6Avr))
 
         def go_turn():
             Gear()
@@ -227,23 +225,23 @@ class Thread2(QThread):
                     Steering(turnDeg)
                     # delay(300)
             else:
-                if(r4Avr >= 150):
-                    turnDeg = (-r4Avr)+150
+                if(r4Avr >= 180):
+                    turnDeg = (-r4Avr)+180
                     if(turnDeg > 127 or turnDeg < -127):
                         Steering(-127)
                     else:
                         Steering(turnDeg)
 
                 # 좌측으로 붙는 경우 오른쪽으로
-                elif(l5Avr >= 150):
-                    turnDeg = l5Avr-150
+                elif(l5Avr >= 180):
+                    turnDeg = l5Avr-180
                     if(turnDeg > 127 or turnDeg < -127):
                         Steering(127)
                     else:
                         Steering(turnDeg)
 
                 # 아무것도 아닌경우 다시 직진
-                elif(r4Avr < 150 and l5Avr < 150):
+                elif(r4Avr < 180 and l5Avr < 180):
                     Steering(0)
 
         # -------- 다음부터는 코너 회전 명령 ------------
@@ -264,7 +262,7 @@ class Thread2(QThread):
 
             # 버그 수정
             # 만약 빛이 없는 곳에서 코너가 확인되면
-            if(sensor.CDS <= 300):
+            if(sensor.CDS <= 80):
                 return
 
             # 초기화 및 설정 (코너 확인)
@@ -299,7 +297,7 @@ class Thread2(QThread):
 
             # 버그 수정
             # 만약 빛이 없는 곳에서 코너가 확인되면
-            if(sensor.CDS <= 300):
+            if(sensor.CDS <= 80):
                 return
 
             if(f2 >= 40):
@@ -312,7 +310,7 @@ class Thread2(QThread):
                     while turnCheck:
                         # 버그 수정
                         # 만약 빛이 없는 곳에서 코너가 확인되면
-                        if(sensor.CDS <= 300):
+                        if(sensor.CDS <= 80):
                             break
                         conerTurn("left")
                         
@@ -320,7 +318,7 @@ class Thread2(QThread):
                     while turnCheck:
                         # 버그 수정
                         # 만약 빛이 없는 곳에서 코너가 확인되면
-                        if(sensor.CDS <= 300):
+                        if(sensor.CDS <= 80):
                             break
                         conerTurn("right")
 
@@ -425,7 +423,7 @@ class Thread2(QThread):
                     Go(300, 300)
                     if(sensor.IR[3] <= 30):
                         Steering(-127)
-                        delay(4000)
+                        delay(4500)
                         Steering(0)
                         left = 0
                         
@@ -517,7 +515,7 @@ class Thread2(QThread):
                 cds_cnt = 0
             
             # 도착?
-            if(sensor.CDS <= 150):
+            if(sensor.CDS <= 80):
                 global auto_fin
 
                 # auto_fin == True
@@ -572,8 +570,8 @@ class Mywindow(QMainWindow, form_class):
 
         #이미지 초기화 처리를 한다. 
         pixmapLogo   = QPixmap("ui_img\\buil.png")
-        pixmapPerson = QPixmap("ui_img\\person.png")
-        pixmapRobot = QPixmap("ui_img\\robot.png")
+        pixmapPerson = QPixmap("ui_img\\person_img.png")
+        pixmapRobot = QPixmap("ui_img\\robot_img.png")
         pixmapAltino = QPixmap("ui_img\\altino_lite_img.png")
         pixmapTalk1 = QPixmap("ui_img\\talkBox1.png")
         pixmapTalk2 = QPixmap("ui_img\\talkBox2.png")
@@ -705,7 +703,7 @@ class Mywindow(QMainWindow, form_class):
     # 음성 출력
     def sayPrint(self):
         global say
-        print(say[0] +"/"+ say[1])
+        # print(say[0] +"/"+ say[1])
         
         if(say[0] == "robot"):
             self.txtRobotQue.setText(say[1])
